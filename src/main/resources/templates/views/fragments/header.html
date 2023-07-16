@@ -8,16 +8,18 @@
 </head>
 <body>
 	<div th:fragment="header">
-		<table width="100%" cellspacing="0" cellpadding="0">
-			<tr bgcolor="#A3815B" cellspacing="0">
-				<td width="10%">
-					<img alt="Healing House" height="100" width="200" th:src="@{images/logo.jpg}">
-				</td>
-				<td align="center">
-					<h1>Healing House</h1>
-				</td>
-			</tr>
-		</table>
+		<a th:href="@{/}">
+			<table width="100%" cellspacing="0" cellpadding="0">
+				<tr bgcolor="#A3815B" cellspacing="0">
+					<td width="10%">
+						<img alt="Healing House" height="100" width="200" th:src="@{/images/logo.jpg}">
+					</td>
+					<td align="center">
+						<h1>HEALING HOUSE</h1>
+					</td>
+				</tr>
+			</table>
+		</a>
 	</div>
 		
 </body>

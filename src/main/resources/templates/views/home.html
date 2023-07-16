@@ -3,18 +3,18 @@
 <head>
 	<meta charset="ISO-8859-1">
 	<title th:text="#{healing.house.title}"></title>
-	<link th:href="@{/cssandjs/bootstrap.min.css}"></link>
+	<link rel="stylesheet" th:href="@{/cssandjs/bootstrap.min.css}"></link>
 	<script type="text/javascript" th:src="@{/cssandjs/bootstrap.bundle.min.js}"></script>
 </head>
 <body>
 	<div th:insert="~{/fragments/header :: header}"></div>
-	<div class="container text-center">
+	<div class="container">
 		<table class="table">
 			<tbody>
 				<tr class="table-primary">
 					<td class="table-primary">
-						<a th:href="@{/patients}">
-							<input type="button" value="PATIENTS">
+						<a th:href="@{/patients/}">
+							<button class="btn btn-info">PATIENTS</button>
 						</a>
 					</td>
 				</tr>
