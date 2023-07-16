@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="ISO-8859-1">
+	<title th:text="#{healing.house.title}"></title>
+	<link th:href="@{/cssandjs/bootstrap.min.css}"></link>
+	<script type="text/javascript" th:src="@{/cssandjs/bootstrap.bundle.min.js}"></script>
+</head>
+<body>
+	<div th:insert="~{/fragments/header :: header}"></div>
+	<div class="container text-center">
+		<table class="table">
+			<tbody>
+				<tr class="table-primary">
+					<td class="table-primary">
+						<a th:href="@{/patients}">
+							<input type="button" value="PATIENTS">
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>	
+		
+
+	</div>
+	
+</body>
+</html>
