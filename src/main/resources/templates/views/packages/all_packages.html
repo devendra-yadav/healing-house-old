@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="ISO-8859-1">
+	<title th:text="#{healing.house.title}"></title>
+	<link rel="stylesheet" th:href="@{/cssandjs/bootstrap.min.css}"></link>
+	<script type="text/javascript" th:src="@{/cssandjs/bootstrap.bundle.min.js}"></script>
+	<script type="text/javascript">
+		function deleteConfirmation(name){
+			if(confirm('Are you sure you want to delete package '+name+'?')){
+				return true;
+			}else{
+				event.preventDefault();
+			}
+		}
+	</script>
+</head>
+<body>
+	<div th:insert="~{/fragments/header :: header}"></div>
+	<div class="container text-center">
+		<h2>All Packages</h2>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Number of Sessions</th>
+					<th>Total Fees</th>
+					<th>Remarks</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="package: ${allPackages}" >
+					<td><a th:text="${package.id}" th:href="@{'/packages/'+${package.id}}"/></td>
+					<td th:text="${package.name}"></td>
+					<td th:text="${package.numOfSessions}"></td>
+					<td th:text="${package.totalFees}"></td>
+					<td th:text="${package.remarks}"></td>
+					<td>
+						<a th:href="@{'/packages/edit/'+${package.id}}" class="btn btn-info">Edit</a>
+						<a th:href="@{'/packages/delete/'+${package.id}}" class="btn btn-info" th:onclick="deleteConfirmation([[${package.name}]])">Delete</a>
+					</td>
+				</tr>
+			</tbody>
+			
+		</table>
+	</div>
+</body>
+</html>

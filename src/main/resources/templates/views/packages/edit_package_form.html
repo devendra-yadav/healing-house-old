@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="ISO-8859-1">
+	<title th:text="#{healing.house.title}"></title>
+	<link rel="stylesheet" th:href="@{/cssandjs/bootstrap.min.css}"></link>
+	<script type="text/javascript" th:src="@{/cssandjs/bootstrap.bundle.min.js}"></script>
+	<style>
+	    .error {
+	        color: red;
+	    }
+	</style>
+</head>
+<body>
+	<div th:insert="~{/fragments/header :: header}"></div>
+	<div class="container text-center">
+		<h2>Edit Package</h2>
+		<form th:action="@{/packages/edit_package}" th:object="${package}" th:method="post">
+			Package ID <input type="text" th:field="*{id}" readonly="readonly"><br>
+			Package Name <input type="text" th:field="*{name}"><br>
+			Number of Sessions <input type="text" th:field="*{numOfSessions}">
+				<div th:if="${#fields.hasErrors('numOfSessions')}" th:errors="*{numOfSessions}" th:errorClass="error" /><br>
+			Total Fees <input type="text" th:field="*{totalFees}">
+				<div th:if="${#fields.hasErrors('totalFees')}" th:errors="*{totalFees}" th:errorClass="error" /><br>
+			Remarks <input type="text" th:field="*{remarks}"><br>
+			<button type="submit">Submit</button>
+		</form>
+	</div>
+</body>
+</html>

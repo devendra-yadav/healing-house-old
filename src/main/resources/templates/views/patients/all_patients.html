@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="ISO-8859-1">
+	<title th:text="#{healing.house.title}"></title>
+	<link rel="stylesheet" th:href="@{/cssandjs/bootstrap.min.css}"></link>
+	<script type="text/javascript" th:src="@{/cssandjs/bootstrap.bundle.min.js}"></script>
+	<script type="text/javascript">
+		function deleteConfirmation(name){
+			if(confirm('Are you sure you want to delete patient '+name+'?')){
+				return true;
+			}else{
+				event.preventDefault();
+			}
+		}
+	</script>
+</head>
+<body>
+	<div th:insert="~{/fragments/header :: header}"></div>
+	<div class="container-fluid">
+		<h2>All Patients</h2>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Date Of Birth</th>
+					<th>Mobile</th>
+					<th>Email</th>
+					<th>Address</th>
+					<th>FirstVisit Date</th>
+					<th>Remarks</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="patient: ${allPatients}" >
+					<td><a th:text="${patient.id}" th:href="@{'/patients/'+${patient.id}}"/></td>
+					<td th:text="${patient.name}"></td>
+					<td th:text="${patient.dateOfBirth}"></td>
+					<td th:text="${patient.mobile}"></td>
+					<td th:text="${patient.email}"></td>
+					<td th:text="${patient.addressLine1} +', ' + ${patient.addressLine2} +', ' + ${patient.city} +', ' + ${patient.state}  +', '+ ${patient.country}"></td>
+					<td th:text="${patient.firstVisitDate}"></td>
+					<td th:text="${patient.remarks}"></td>
+					<td>
+						<a th:href="@{'/patients/edit/'+${patient.id}}" class="btn btn-info">Edit</a>
+						<a th:href="@{'/patients/delete/'+${patient.id}}" class="btn btn-info"  th:onclick="deleteConfirmation([[${patient.name}]])">Delete</a>
+					</td>
+				</tr>
+			</tbody>
+			
+		</table>
+	</div>
+</body>
+</html>
