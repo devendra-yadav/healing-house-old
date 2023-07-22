@@ -22,6 +22,7 @@ public class Package {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
+	@NotNull(message = "Package name cant be blank")
 	private String name;
 	
 	@NotNull(message = "Invalid number")

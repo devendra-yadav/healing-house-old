@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor @AllArgsConstructor
 public class PackageDTO {
 
+	@NotNull(message = "Package name cant be blank")
 	private String name;
 	
 	@NotNull(message = "Invalid number")

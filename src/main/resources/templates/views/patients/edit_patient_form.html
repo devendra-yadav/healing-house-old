@@ -14,15 +14,17 @@
 <body>
 	<div th:insert="~{/fragments/header :: header}"></div>
 	<div class="container text-center">
-		<h2>Add New Patient</h2>
+		<h2>Edit Patient</h2>
 		<a th:href="@{/patients/view_patients}" class="btn btn-primary">All Patients</a>
 		<hr/>
-		<form th:action="@{/patients/add_patient}" th:object="${patient}" th:method="post">
+		<form th:action="@{/patients/edit_patient}" th:object="${patient}" th:method="POST">
+			ID <input type="text" th:field="*{id}" readonly="readonly"/> <br>
 			Name <input type="text" th:field="*{name}"/> 
 				<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" th:errorClass="error" /><br>
 			Date of Birth <input type="date" th:field="*{dateOfBirth}"/><br>
 			Mobile <input type="text" th:field="*{mobile}"/><br>
 			Email <input type="text" th:field="*{email}"/><br>
+			First Visit Date <input type="date" th:field="*{firstVisitDate}"/><br>
 			Address Line 1 <input type="text" th:field="*{addressLine1}"/><br>
 			Address Line 1 <input type="text" th:field="*{addressLine2}"/><br>
 			City <input type="text" th:field="*{city}"/><br>
@@ -30,7 +32,7 @@
 			Country <input type="text" th:field="*{country}"/><br>
 			Remarks <textarea rows="4" cols="30" th:field="*{remarks}"/><br>
 			<button type="submit" class="btn btn-secondary">Submit</button>
-		</form>	
+		</form>
 	</div>
 </body>
 </html>

@@ -2,12 +2,15 @@ package com.hh.entity;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.hh.dto.PatientDTO;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,10 +23,13 @@ public class Patient {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@NotNull(message = "Patient name cant be blank")
 	private String name;
+	@DateTimeFormat( pattern = "yyyy-MM-dd")
 	private LocalDate dateOfBirth;
 	private String mobile;
 	private String email;
+	@DateTimeFormat( pattern = "yyyy-MM-dd")
 	private LocalDate firstVisitDate;
 	private String addressLine1;
 	private String addressLine2;

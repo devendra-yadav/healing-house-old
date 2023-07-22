@@ -15,15 +15,87 @@
 	<div th:insert="~{/fragments/header :: header}"></div>
 	<div class="container text-center">
 		<h2>Edit Package</h2>
+		
+		<a th:href="@{/packages/view_packages}" class="btn btn-primary">All Packages</a>
+		<hr/>
 		<form th:action="@{/packages/edit_package}" th:object="${package}" th:method="post">
+		
+			<div class="table">
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Package ID</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control" type="text" th:field="*{id}" readonly="readonly">
+					</div>
+					
+				</div>
+			
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Package Name</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control" type="text" th:field="*{name}">
+					</div>
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" th:errorClass="error" />
+					</div>
+				</div>
+				
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Number of Sessions</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control" type="text" th:field="*{numOfSessions}">
+					</div>
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('numOfSessions')}" th:errors="*{numOfSessions}" th:errorClass="error" />
+					</div>
+				</div>
+				
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Total Fees</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control" type="text" th:field="*{totalFees}">
+					</div>
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('totalFees')}" th:errors="*{totalFees}" th:errorClass="error" />
+					</div>
+				</div>
+				
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Remarks</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control" type="text" th:field="*{remarks}">
+					</div>
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('remarks')}" th:errors="*{remarks}" th:errorClass="error" />
+					</div>
+				</div>
+				
+			</div>
+			<div class="row">
+				<div class="col-6">
+					<button type="submit" class="btn btn-secondary btn-lg">Submit</button>
+				</div>
+			</div>
+		
+		<!-- 
 			Package ID <input type="text" th:field="*{id}" readonly="readonly"><br>
-			Package Name <input type="text" th:field="*{name}"><br>
+			Package Name <input type="text" th:field="*{name}">
+				<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" th:errorClass="error" /><br>
 			Number of Sessions <input type="text" th:field="*{numOfSessions}">
 				<div th:if="${#fields.hasErrors('numOfSessions')}" th:errors="*{numOfSessions}" th:errorClass="error" /><br>
 			Total Fees <input type="text" th:field="*{totalFees}">
 				<div th:if="${#fields.hasErrors('totalFees')}" th:errors="*{totalFees}" th:errorClass="error" /><br>
 			Remarks <input type="text" th:field="*{remarks}"><br>
-			<button type="submit">Submit</button>
+			<button type="submit" class="btn btn-secondary">Submit</button> -->
 		</form>
 	</div>
 </body>

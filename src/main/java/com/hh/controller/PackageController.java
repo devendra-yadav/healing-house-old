@@ -44,7 +44,7 @@ public class PackageController {
 	public String addPackage(@ModelAttribute("package") @Valid PackageDTO packageDto, BindingResult bindingResult) {
 		logger.info("New package to add "+packageDto);
 		if(bindingResult.hasErrors()) {
-			logger.warn("Added package have invalid input values.");
+			logger.warn("Added package have invalid input values. "+bindingResult);
 			return "packages/add_package_form";
 		}
 		Package pkg = new Package(packageDto);
@@ -52,7 +52,7 @@ public class PackageController {
 		pkg = packageRepository.save(pkg);
 		logger.info("Package Saved with package id "+pkg.getId());
 		
-		return "redirect:/";
+		return "redirect:/packages/view_packages";
 	}
 	
 	@GetMapping("/view_packages")
@@ -71,7 +71,7 @@ public class PackageController {
 	}
 	
 	@PostMapping("/edit_package")
-	public String editPackage(@ModelAttribute("pacakge") @Valid Package pkg, BindingResult bindingResult) {
+	public String editPackage(@ModelAttribute("package") @Valid Package pkg, BindingResult bindingResult) {
 		logger.info("package came for edit "+pkg);
 		if(bindingResult.hasErrors()) {
 			logger.warn("Package have invalid input values.");

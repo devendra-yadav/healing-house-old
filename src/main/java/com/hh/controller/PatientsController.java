@@ -7,16 +7,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hh.dto.PatientDTO;
 import com.hh.entity.Package;
 import com.hh.entity.Patient;
 import com.hh.repository.PatientRepository;
+
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/patients")
@@ -40,18 +44,40 @@ public class PatientsController {
 	}
 	
 	@PostMapping("/add_patient")
-	public String addPatient(@ModelAttribute("patient") PatientDTO patientDto) {
+	public String addPatient(@ModelAttribute("patient") @Valid PatientDTO patientDto, BindingResult bindingResult,  Model model) {
 		logger.info("New patient to add : "+patientDto);
+		
+		if(bindingResult.hasErrors()) {
+			logger.warn("Pation have invalid values. "+bindingResult);
+			return "patients/add_patient_form";
+		}
 		Patient patient = new Patient(patientDto);
 		patient = patientRepository.save(patient);
 		logger.info("Saved New Patient. Patient ID : "+patient.getId());
-		return "redirect:/";
+		return "redirect:/patients/view_patients?recentlyAddedPatientId="+patient.getId();
 	}
 	
 	@GetMapping("/view_patients")
-	public String viewPatients(Model model) {
+	public String viewPatients(@RequestParam(name = "recentlyAddedPatientId", required=false) Integer recentlyAddedPatientId , @RequestParam(name = "recentlyEditedPatientId", required=false) Integer recentlyEditedPatientId, @RequestParam(name = "recentlyDeletedPatientId", required=false) Integer recentlyDeletedPatientId, @RequestParam(name = "recentlyDeletedPatientName", required=false) String recentlyDeletedPatientName, Model model) {
 		List<Patient> allPatients = patientRepository.findAll();
 		model.addAttribute("allPatients", allPatients);
+		logger.info("recentlyEditedPatientId : "+recentlyEditedPatientId+" --> recentlyAddedPatientId : "+recentlyAddedPatientId);
+		if(recentlyAddedPatientId!=null) {
+			Patient recentlyAddedPatient = patientRepository.findById(recentlyAddedPatientId).get();
+			model.addAttribute("recentlyAddedPatient", recentlyAddedPatient);
+			logger.info("Recently added patient model var set "+recentlyAddedPatient);
+		}
+		if(recentlyEditedPatientId!=null) {
+			Patient recentlyEditedPatient = patientRepository.findById(recentlyEditedPatientId).get();
+			model.addAttribute("recentlyEditedPatient", recentlyEditedPatient);
+			logger.info("Recently edited patient model var set "+recentlyEditedPatient);
+		}
+		if(recentlyDeletedPatientId != null) {
+			model.addAttribute("recentlyDeletedPatientId", recentlyDeletedPatientId);
+			model.addAttribute("recentlyDeletedPatientName", recentlyDeletedPatientName);
+			logger.info("Recently deleted patient model var set "+recentlyDeletedPatientId+" "+recentlyDeletedPatientName);
+		}
+		
 		return "patients/all_patients";
 	}
 	
@@ -73,6 +99,25 @@ public class PatientsController {
 		}else {
 			logger.warn("Invalid patient id "+patientId+". Cant delete!");
 		}
-		return "redirect:/patients/view_patients";
+		return "redirect:/patients/view_patients?recentlyDeletedPatientId="+patient.getId()+"&recentlyDeletedPatientName="+patient.getName();
+	}
+	
+	@GetMapping("/edit/{patient_id}")
+	public String editPatientForm(@PathVariable("patient_id") Integer patientId, Model model) {
+		Patient patient = patientRepository.findById(patientId).get();
+		model.addAttribute("patient", patient);
+		return "patients/edit_patient_form";
+	}
+	
+	@PostMapping("/edit_patient")
+	public String editPatient(@ModelAttribute("patient") @Valid Patient patient, BindingResult bindingResult) {
+		logger.info("patient came for edit "+patient);
+		if(bindingResult.hasErrors()) {
+			logger.warn("Patient have invalid values. "+bindingResult);
+			return "patients/edit_patient_form";
+		}
+		patientRepository.save(patient);
+		logger.info("Patient Saved with patient id "+patient.getId());
+		return "redirect:/patients/view_patients?recentlyEditedPatientId="+patient.getId();
 	}
 }
