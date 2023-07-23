@@ -25,7 +25,9 @@
 		<h2 th:text="${patient.name}"></h2>
 		Patient ID : <span th:text="${patient.id}"/>
 		<hr/>
-		<h4 class="mb-5">Treatment Selection</h4>
+		<a class="btn btn-primary mb-2" th:href="@{'/patients/view/'+${patient.id}}">All Treatments</a>
+		<h4 class="mb-3">New Treatment</h4>
+		
 		<form th:action="@{/treatment/select_treatment}" th:object="${treatment}" th:method="post">
 			<div class="table">
 				<div class="row mb-3">

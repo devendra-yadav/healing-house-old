@@ -22,8 +22,8 @@
 		Patient ID : <span th:text="${patient.id}"/>
 		<hr/>
 		
-		<a th:href="@{/treatment/select_treatment_form/{patient_id}(patient_id=${patient.id})}" class="btn btn-primary">Select Treatment</a>
-		
+		<a th:href="@{/treatment/select_treatment_form/{patient_id}(patient_id=${patient.id})}" class="btn btn-primary mb-2">New Treatment</a>
+		<h4>All Treatments</h4>
 		<table class="table table-striped text-start mt-2" id="patient-table">
 			<thead>
 				<tr>
