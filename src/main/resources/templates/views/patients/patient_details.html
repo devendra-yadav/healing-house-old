@@ -45,7 +45,16 @@
 					<td class="col-1" th:text="${treatment.price}"></td>
 					<td class="col-1" th:text="${treatment.totalSessions}"></td>
 					<td class="col-1" th:text="${treatment.completedSessions}"></td>
-					<td class="col-1" th:text="${treatment.hasPaid}"></td>
+					<td class="col-1">
+						<span th:if="${treatment.hasPaid == true}">YES</span>
+						<span th:if="${treatment.hasPaid == false}">
+							NO 
+							<span>
+								<a class="btn btn-warning ml-2" th:href="@{'/treatment/pay/'+${patient.id}+'/'+${treatment.id}}">Pay</a>
+							</span>
+						</span>
+						
+					</td>
 					<td class="col-2" th:text="${treatment.remarks}"></td>
 				</tr>
 			</tbody>

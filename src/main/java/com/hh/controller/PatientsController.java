@@ -95,7 +95,6 @@ public class PatientsController {
 		
 		logger.info("Fetching treatment records for patient id : "+patientId);
 		
-		// Pending to add fetch treatment records for the given patient
 		List<Treatment> allTreatments = treatmentRepository.findByPatient(patient);
 		logger.info("All treatments for Patient ("+patient.getId()+","+patient.getName()+") : "+allTreatments);
 		model.addAttribute("allTreatments", allTreatments);

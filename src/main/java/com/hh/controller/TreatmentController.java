@@ -82,4 +82,20 @@ public class TreatmentController {
 		
 		return "/home";
 	}
+	
+	@GetMapping("/pay/{patientId}/{treatmentId}")
+	public String makePayment(@PathVariable("patientId") Integer patientId, @PathVariable("treatmentId") Integer treatmentId, Model model) {
+		Patient patient = patientRepository.findById(patientId).get();
+		Treatment treatment = treatmentRepository.findById(treatmentId).get();
+		
+		
+		treatment.setHasPaid(true);
+		treatmentRepository.save(treatment);
+		logger.info("Payment status for patient "+patient.getName()+" (treatment id : "+treatmentId+") changed to PAID");
+		
+		List<Treatment> allTreatments = treatmentRepository.findByPatient(patient);
+		model.addAttribute("allTreatments", allTreatments);
+		model.addAttribute("patient", patient);		
+		return "/patients/patient_details";
+	}
 }

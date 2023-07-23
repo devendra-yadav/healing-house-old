@@ -72,7 +72,7 @@
 						<label>Remarks</label>
 					</div>
 					<div class="col-4">
-						<input class="form-control" type="text" th:field="*{remarks}">
+						<textarea rows="4" cols="30" class="form-control" th:field="*{remarks}"/>
 					</div>
 					<div class="col-3">
 						<div th:if="${#fields.hasErrors('remarks')}" th:errors="*{remarks}" th:errorClass="error" />
