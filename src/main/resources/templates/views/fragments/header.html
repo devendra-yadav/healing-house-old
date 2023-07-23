@@ -18,6 +18,32 @@
 				</tr>
 			</table>
 		</a>
+		
+		<div class="container mt-3">
+			<div class="dropdown">
+			  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+			    Patients
+			  </button>
+			  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+			    <li><a class="dropdown-item" th:href="@{/patients/add_patient_form}">New Patient</a></li>
+			    <li><a class="dropdown-item" th:href="@{/patients/view_patients}">View Patients</a></li>
+			  </ul>
+			  
+			  
+			  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+			    Packages
+			  </button>
+			  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+			    <li><a class="dropdown-item" th:href="@{/packages/add_package_form}">New Package</a></li>
+			    <li><a class="dropdown-item" th:href="@{/packages/view_packages}">View Packages</a></li>
+			  </ul>
+			</div>
+			
+			
+		</div>
+		
+		
+		
 	</div>
 		
 </body>

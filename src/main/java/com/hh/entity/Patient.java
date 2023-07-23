@@ -1,6 +1,7 @@
 package com.hh.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -30,7 +31,7 @@ public class Patient {
 	private String mobile;
 	private String email;
 	@DateTimeFormat( pattern = "yyyy-MM-dd")
-	private LocalDate firstVisitDate;
+	private LocalDateTime firstVisitDate;
 	private String addressLine1;
 	private String addressLine2;
 	private String city;

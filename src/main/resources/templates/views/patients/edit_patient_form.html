@@ -18,6 +18,159 @@
 		<a th:href="@{/patients/view_patients}" class="btn btn-primary">All Patients</a>
 		<hr/>
 		<form th:action="@{/patients/edit_patient}" th:object="${patient}" th:method="POST">
+		
+			<div class="table">
+			
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Patient ID</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control" type="text" th:field="*{id}" readonly="readonly">
+					</div>
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('id')}" th:errors="*{id}" th:errorClass="error" />
+					</div>
+				</div>
+				
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Name</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control" type="text" th:field="*{name}">
+					</div>
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" th:errorClass="error" />
+					</div>
+				</div>
+				
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Date of Birth</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control" type="date" th:field="*{dateOfBirth}">
+					</div>
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}" th:errorClass="error" />
+					</div>
+				</div>
+				
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Mobile</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control" type="text" th:field="*{mobile}">
+					</div>
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('mobile')}" th:errors="*{mobile}" th:errorClass="error" />
+					</div>
+				</div>
+				
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Email</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control" type="text" th:field="*{email}">
+					</div>
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" th:errorClass="error" />
+					</div>
+				</div>
+				
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Registraion Date</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control" type="text" th:field="*{firstVisitDate}" readonly="readonly">
+					</div>
+					
+				</div>
+				
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Address Line 1</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control" type="text" th:field="*{addressLine1}">
+					</div>
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('addressLine1')}" th:errors="*{addressLine1}" th:errorClass="error" />
+					</div>
+				</div>
+				
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Address Line 2</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control" type="text" th:field="*{addressLine2}">
+					</div>
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('addressLine2')}" th:errors="*{addressLine2}" th:errorClass="error" />
+					</div>
+				</div>
+				
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>City</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control" type="text" th:field="*{city}">
+					</div>
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('city')}" th:errors="*{city}" th:errorClass="error" />
+					</div>
+				</div>
+				
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>State</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control" type="text" th:field="*{state}">
+					</div>
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('state')}" th:errors="*{state}" th:errorClass="error" />
+					</div>
+				</div>
+				
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Country</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control" type="text" th:field="*{country}">
+					</div>
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('country')}" th:errors="*{country}" th:errorClass="error" />
+					</div>
+				</div>
+				
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Remarks</label>
+					</div>
+					<div class="col-4">
+						<textarea rows="4" cols="30"  class="form-control" th:field="*{remarks}"/>
+					</div>
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('remarks')}" th:errors="*{remarks}" th:errorClass="error" />
+					</div>
+				</div>
+				
+			</div>
+			<div class="row mb-5">
+				<div class="col-6">
+					<button type="submit" class="btn btn-secondary btn-lg">Submit</button>
+				</div>
+			</div>
+		
+		<!-- 
 			ID <input type="text" th:field="*{id}" readonly="readonly"/> <br>
 			Name <input type="text" th:field="*{name}"/> 
 				<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" th:errorClass="error" /><br>
@@ -31,7 +184,7 @@
 			State <input type="text" th:field="*{state}"/><br>
 			Country <input type="text" th:field="*{country}"/><br>
 			Remarks <textarea rows="4" cols="30" th:field="*{remarks}"/><br>
-			<button type="submit" class="btn btn-secondary">Submit</button>
+			<button type="submit" class="btn btn-secondary">Submit</button> -->
 		</form>
 	</div>
 </body>

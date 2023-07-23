@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.hh.dto.PatientDTO;
 import com.hh.entity.Package;
 import com.hh.entity.Patient;
+import com.hh.entity.Treatment;
 import com.hh.repository.PatientRepository;
+import com.hh.repository.TreatmentRepository;
 
 import jakarta.validation.Valid;
 
@@ -30,6 +32,9 @@ public class PatientsController {
 	
 	@Autowired
 	private PatientRepository patientRepository;
+	
+	@Autowired
+	private TreatmentRepository treatmentRepository;
 	
 	@GetMapping("/")
 	public String patients() {
@@ -87,6 +92,14 @@ public class PatientsController {
 		Patient patient = patientRepository.findById(patientId).get();
 		logger.info("Patient fetched : "+patient);
 		model.addAttribute("patient", patient);
+		
+		logger.info("Fetching treatment records for patient id : "+patientId);
+		
+		// Pending to add fetch treatment records for the given patient
+		List<Treatment> allTreatments = treatmentRepository.findByPatient(patient);
+		logger.info("All treatments for Patient ("+patient.getId()+","+patient.getName()+") : "+allTreatments);
+		model.addAttribute("allTreatments", allTreatments);
+		
 		return "/patients/patient_details";
 	}
 	

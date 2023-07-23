@@ -1,6 +1,7 @@
 package com.hh.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,7 +19,7 @@ public class PatientDTO {
 	private LocalDate dateOfBirth;
 	private String mobile;
 	private String email;
-	private LocalDate firstVisitDate = LocalDate.now();
+	private LocalDateTime firstVisitDate = LocalDateTime.now();
 	private String addressLine1;
 	private String addressLine2;
 	private String city;
