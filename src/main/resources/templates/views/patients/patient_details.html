@@ -12,6 +12,14 @@
 		$(document).ready(function(){
 			$("#patient-table").DataTable();
 		})
+		
+		function deleteConfirmation(treatmentId, treatmentPackageName, treatmentStartDate){
+			if(confirm('Are you sure you want to delete treatment package "'+treatmentPackageName+'", having id "'+treatmentId+'" that started on "'+treatmentStartDate+'"?')){
+				return true;
+			}else{
+				event.preventDefault();
+			}
+		}
 	
 	</script>
 </head>
@@ -34,7 +42,8 @@
 					<th class="col-1">Total Sessions</th>
 					<th class="col-1">Completed Sessions</th>
 					<th class="col-1">Has Paid</th>
-					<th class="col-2">Remarks</th>
+					<th class="col-3">Initial Diagnosis</th>
+					<th class="col-1">Action</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -55,7 +64,11 @@
 						</span>
 						
 					</td>
-					<td class="col-2" th:text="${treatment.remarks}"></td>
+					<td class="col-3" th:text="${treatment.initialDiagnosis}"></td>
+					<td class="col-2">
+						<a th:href="@{'/treatment/edit/'+${patient.id}+'/'+${treatment.id}}" class="btn btn-info">Edit</a>
+						<a th:href="@{'/treatment/delete/'+${patient.id}+'/'+${treatment.id}}" class="btn btn-danger ml-2" th:onclick="deleteConfirmation([[${treatment.id}]], [[${treatment.pkg.name}]],  [[${#temporals.format(treatment.startDate,'dd-MMM-yyyy HH:mm')}]])">Delete</a>
+					</td>
 				</tr>
 			</tbody>
 			

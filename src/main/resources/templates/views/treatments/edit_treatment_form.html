@@ -17,6 +17,8 @@
 			//alert(packageMap);
 			
 		}
+		
+		
 	</script>
 </head>
 <body>
@@ -28,14 +30,25 @@
 		<a class="btn btn-primary mb-2" th:href="@{'/patients/view/'+${patient.id}}">All Treatments</a>
 		<h4 class="mb-3">Edit Treatment</h4>
 		
-		<form th:action="@{/treatment/select_treatment}" th:object="${treatment}" th:method="post">
+		<form th:action="@{/treatment/edit_treatment}" th:object="${treatment}" th:method="post">
 			<div class="table">
+				
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Treatment ID</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control" type="number" th:field="*{id}" readonly="readonly">
+					</div>
+					
+				</div>
+				
 				<div class="row mb-3">
 					<div class="col-2">
 						<label>Package</label>
 					</div>
 					<div class="col-4">
-						<select class="form-control" th:field="*{packageId}" th:onchange="setDefaultValues()" id="pkg">
+						<select class="form-control" th:field="*{pkg.id}" th:onchange="setDefaultValues()" id="pkg">
 							<option th:each="package : ${all_packages}" th:value="${package.id}" th:text="${package.name}">
 							</option>
 						</select>
@@ -86,7 +99,7 @@
 					</div>
 				</div>
 				
-				<input type="hidden" th:field="*{patientId}" th:value="${patient}">
+				<input type="hidden" th:field="*{patient}" th:value="${patient}">
 			</div>
 			<div class="row mb-5">
 				<div class="col-6">

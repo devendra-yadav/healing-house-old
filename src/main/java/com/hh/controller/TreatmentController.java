@@ -98,4 +98,40 @@ public class TreatmentController {
 		model.addAttribute("patient", patient);		
 		return "/patients/patient_details";
 	}
+	
+	@GetMapping("/delete/{patientId}/{treatmentId}")
+	public String deleteTreatment(@PathVariable("patientId") Integer patientId, @PathVariable("treatmentId") Integer treatmentId, Model model) {
+		Patient patient = patientRepository.findById(patientId).get();
+		logger.info("Request came to delete treatment id "+treatmentId+" for patient : "+patient);
+		
+		treatmentRepository.deleteById(treatmentId);
+		logger.info("deleted treatment id "+treatmentId+" for patient : "+patient);
+		
+		List<Treatment> allTreatments = treatmentRepository.findByPatient(patient);
+		model.addAttribute("allTreatments", allTreatments);
+		model.addAttribute("patient", patient);		
+		return "/patients/patient_details";
+	}
+	
+	@GetMapping("/edit/{patientId}/{treatmentId}")
+	public String editTreatmentForm(@PathVariable("patientId") Integer patientId, @PathVariable("treatmentId") Integer treatmentId, Model model) {
+		Patient patient = patientRepository.findById(patientId).get();
+		Treatment treatment = treatmentRepository.findById(treatmentId).get();
+		logger.info("Request came to edit treatment "+treatment+" for patient : "+patient);
+		List<Package> allPackages = packageRepository.findAll();
+		model.addAttribute("patient", patient);		
+		model.addAttribute("treatment", treatment);
+		model.addAttribute("all_packages", allPackages);
+		
+		return "/treatments/edit_treatment_form";
+	}
+	
+	@PostMapping("/edit_treatment")
+	public String editTreatment(@ModelAttribute("treatment") Treatment treatment, Model model) {
+		logger.info("request to update treatment. updated treatment "+treatment);
+		treatment = treatmentRepository.save(treatment);
+		logger.info("Treatment updated "+treatment);
+		
+		return "redirect:/patients/view/"+treatment.getPatient().getId();
+	}
 }

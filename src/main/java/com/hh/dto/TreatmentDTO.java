@@ -22,6 +22,6 @@ public class TreatmentDTO {
 	private int totalSessions;
 	private int completedSessions;
 	private boolean hasPaid;
-	private String remarks;
+	private String initialDiagnosis;
 	
 }

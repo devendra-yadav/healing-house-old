@@ -31,7 +31,7 @@ public class Treatment {
 	private int totalSessions;
 	private int completedSessions;
 	private boolean hasPaid;
-	private String remarks;
+	private String initialDiagnosis;
 	
 	public Treatment(TreatmentDTO treatmentDto, Patient patient, Package pkg) {
 		this.patient = patient;
@@ -40,6 +40,6 @@ public class Treatment {
 		this.totalSessions = treatmentDto.getTotalSessions();
 		this.completedSessions = 0;
 		this.hasPaid = treatmentDto.isHasPaid();
-		this.remarks = treatmentDto.getRemarks();
+		this.initialDiagnosis = treatmentDto.getInitialDiagnosis();
 	}
 }
