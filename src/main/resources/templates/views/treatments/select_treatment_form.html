@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="ISO-8859-1">
+	<title th:text="#{healing.house.title}"></title>
+	<link rel="stylesheet" th:href="@{/cssandjs/bootstrap.min.css}"></link>
+	<script type="text/javascript" th:src="@{/cssandjs/bootstrap.bundle.min.js}"></script>
+	<style>
+	    .error {
+	        color: red;
+	    }
+	</style>
+	<script type="text/javascript">
+		function setDefaultValues(){
+			var pkgId = document.getElementById('pkg').value;
+			var packageMap = '[[${packageMap}]]';
+			//alert(packageMap);
+			
+		}
+	</script>
+</head>
+<body>
+	<div th:insert="~{/fragments/header :: header}"></div>
+	<div class="container text-center">
+		<h2 th:text="${patient.name}"></h2>
+		Patient ID : <span th:text="${patient.id}"/>
+		<hr/>
+		<a class="btn btn-primary mb-2" th:href="@{'/patients/view/'+${patient.id}}">All Treatments</a>
+		<h4 class="mb-3">New Treatment</h4>
+		
+		<form th:action="@{/treatment/select_treatment}" th:object="${treatment}" th:method="post">
+			<div class="table">
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Package</label>
+					</div>
+					<div class="col-4">
+						<select class="form-control" th:field="*{packageId}" th:onchange="setDefaultValues()" id="pkg">
+							<option th:each="package : ${all_packages}" th:value="${package.id}" th:text="${package.name}">
+							</option>
+						</select>
+					</div>
+					
+				</div>
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Total Sessions</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control" type="number" th:field="*{totalSessions}" id="totalSessions">
+					</div>
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('totalSessions')}" th:errors="*{totalSessions}" th:errorClass="error" />
+					</div>
+				</div>
+				
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Price</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control" type="number" th:field="*{price}" id="price">
+					</div>
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" th:errorClass="error" />
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Has Paid</label>
+					</div>
+					<div class="col-4 form-check form-switch mt-2">
+						<input class="form-control form-check-input" type="checkbox" th:field="*{hasPaid}">
+					</div>
+					
+				</div>
+				
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Initial Diagnosis</label>
+					</div>
+					<div class="col-4">
+						<textarea rows="6" cols="30"  class="form-control" th:field="*{initialDiagnosis}"/>
+					</div>
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('initialDiagnosis')}" th:errors="*{initialDiagnosis}" th:errorClass="error" />
+					</div>
+				</div>
+				
+				<input type="hidden" th:field="*{patientId}" th:value="${patient}">
+			</div>
+			<div class="row mb-5">
+				<div class="col-6">
+					<button type="submit" class="btn btn-secondary btn-lg">Submit</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

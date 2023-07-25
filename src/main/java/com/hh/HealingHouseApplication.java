@@ -8,6 +8,7 @@ public class HealingHouseApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(HealingHouseApplication.class, args);
+		System.out.println("Started !!");
 	}
 
 }
