@@ -56,6 +56,16 @@ public class PatientsController {
 			logger.warn("Pation have invalid values. "+bindingResult);
 			return "patients/add_patient_form";
 		}
+		
+		if(patientDto.getHowDidYouFindUs().equals(",")) {
+			patientDto.setHowDidYouFindUs("");
+		}
+		//Remove extra comma from the end
+		if(patientDto.getHowDidYouFindUs().endsWith(",")) {
+			int lengthOfHowDidYouFindUs=patientDto.getHowDidYouFindUs().length();
+			patientDto.setHowDidYouFindUs(patientDto.getHowDidYouFindUs().substring(0, lengthOfHowDidYouFindUs-1));
+		}
+		
 		Patient patient = new Patient(patientDto);
 		patient = patientRepository.save(patient);
 		logger.info("Saved New Patient. Patient ID : "+patient.getId());
@@ -128,6 +138,18 @@ public class PatientsController {
 			logger.warn("Patient have invalid values. "+bindingResult);
 			return "patients/edit_patient_form";
 		}
+		
+		//This will happen when someone didnt choose any option. So instead of save ",", we save blank
+		if(patient.getHowDidYouFindUs().equals(",")) {
+			patient.setHowDidYouFindUs("");
+		}
+		
+		//Remove extra comma from the end
+		if(patient.getHowDidYouFindUs().endsWith(",")) {
+			int lengthOfHowDidYouFindUs=patient.getHowDidYouFindUs().length();
+			patient.setHowDidYouFindUs(patient.getHowDidYouFindUs().substring(0, lengthOfHowDidYouFindUs-1));
+		}
+		
 		patientRepository.save(patient);
 		logger.info("Patient Saved with patient id "+patient.getId());
 		return "redirect:/patients/view_patients?recentlyEditedPatientId="+patient.getId();

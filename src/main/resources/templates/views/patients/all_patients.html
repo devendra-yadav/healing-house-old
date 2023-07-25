@@ -60,6 +60,7 @@
 					<th class="col-1">Date Of Birth</th>
 					<th class="col-1">Mobile</th>
 					<th class="col-2">Email</th>
+					<th class="col-2">How did you find us?</th>
 					<th class="col-3">Address</th>
 					<th class="col-1">Registration Date</th>
 					<th class="col-2">Remarks</th>
@@ -68,12 +69,13 @@
 			</thead>
 			<tbody>
 				<tr th:each="patient: ${allPatients}" >
-					<td class="col"><a th:text="${patient.id}" th:href="@{'/patients/view/'+${patient.id}}"/></td>
+					<td class="col"><a class="btn btn-secondary" th:text="${patient.id}" th:href="@{'/patients/view/'+${patient.id}}"/></td>
 					<td class="col-1" th:text="${patient.name}"></td>
 					<td class="col-1" th:text="${#temporals.format(patient.dateOfBirth,'dd-MMM-yyyy')}"></td>
 					<td class="col-1" th:text="${patient.mobile}"></td>
 					<td class="col-2" th:text="${patient.email}"></td>
-					<td class="col-2" th:text="${patient.addressLine1} +', ' + ${patient.addressLine2} +', ' + ${patient.city} +', ' + ${patient.state}  +', '+ ${patient.country}"></td>
+					<td class="col-2" th:text="${patient.howDidYouFindUs}"></td>
+					<td class="col-2" th:text="${patient.addressLine1} +' ' + ${patient.addressLine2} +' ' + ${patient.city} +' ' + ${patient.state}  +' '+ ${patient.country}"></td>
 					
 					<td class="col-2" th:text="${#temporals.format(patient.firstVisitDate,'dd-MMM-yyyy HH:mm')}"></td>
 					<td class="col-1" th:text="${patient.remarks}"></td>

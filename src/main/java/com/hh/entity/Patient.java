@@ -30,7 +30,8 @@ public class Patient {
 	private LocalDate dateOfBirth;
 	private String mobile;
 	private String email;
-	@DateTimeFormat( pattern = "yyyy-MM-dd")
+	private String howDidYouFindUs;
+	@DateTimeFormat( pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime firstVisitDate;
 	private String addressLine1;
 	private String addressLine2;
@@ -44,6 +45,7 @@ public class Patient {
 		this.dateOfBirth = patientDto.getDateOfBirth();
 		this.mobile = patientDto.getMobile();
 		this.email = patientDto.getEmail();
+		this.howDidYouFindUs = patientDto.getHowDidYouFindUs();
 		this.firstVisitDate = patientDto.getFirstVisitDate();
 		this.addressLine1 = patientDto.getAddressLine1();
 		this.addressLine2 = patientDto.getAddressLine2();

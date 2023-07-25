@@ -12,7 +12,7 @@ public class GlobalController {
 
 	@InitBinder
 	public void initBinder(WebDataBinder webDataBinder) {
-		StringTrimmerEditor ste = new StringTrimmerEditor(true);
+		StringTrimmerEditor ste = new StringTrimmerEditor(false);
 		webDataBinder.registerCustomEditor(String.class, ste);
 	}
 }

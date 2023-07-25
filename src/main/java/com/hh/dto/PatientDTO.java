@@ -19,6 +19,7 @@ public class PatientDTO {
 	private LocalDate dateOfBirth;
 	private String mobile;
 	private String email;
+	private String howDidYouFindUs;
 	private LocalDateTime firstVisitDate = LocalDateTime.now();
 	private String addressLine1;
 	private String addressLine2;

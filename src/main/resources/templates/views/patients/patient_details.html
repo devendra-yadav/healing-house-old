@@ -26,8 +26,20 @@
 <body>
 	<div th:insert="~{/fragments/header :: header}"></div>
 	<div class="container text-center mb-5">
+		<a th:href="@{'/patients/edit/'+${patient.id}}">
+				<img th:src="@{/images/edit.jpg}" width="40" height="40">
+		</a>
 		<h2 th:text="${patient.name}"></h2>
-		Patient ID : <span th:text="${patient.id}"/>
+		
+		<h6>Patient ID : <span th:text="${patient.id}"/></h6>
+		<span th:text="${patient.addressLine1}+' '+${patient.addressLine2}+' '+${patient.city}+' '+${patient.state}+' '+${patient.country}"/>
+		<div class="row alert alert-secondary mt-2 text-center">
+			<div class="col-2" th:text="'BirthDate- '+${patient.dateOfBirth != null? patient.dateOfBirth:''}"></div>
+			<div class="col-2" th:text="'Mobile- '+${patient.mobile}"></div>
+			<div class="col-3" th:text="'Email- '+${patient.email}"></div>
+			<div class="col-3" th:text="'FoundUsBy- '+${patient.howDidYouFindUs}"></div>
+			<div class="col-2" th:text="'RegistrationDate- '+${patient.firstVisitDate}"></div>
+		</div>
 		<hr/>
 		
 		<a th:href="@{/treatment/select_treatment_form/{patient_id}(patient_id=${patient.id})}" class="btn btn-primary mb-2">New Treatment</a>

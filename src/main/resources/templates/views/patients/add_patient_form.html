@@ -10,6 +10,16 @@
 	        color: red;
 	    }
 	</style>
+	<script type="text/javascript">
+		function howDidYouFindUsCheckOthers(){
+			var howDidYouFindUs=document.getElementById('howDidYouFindUs').value;
+			if(howDidYouFindUs=='Others'){
+				document.getElementById('howDidYouFindUs_others').hidden="";
+			}else{
+				document.getElementById('howDidYouFindUs_others').hidden="hidden";
+			}
+		}
+	</script>
 </head>
 <body>
 	<div th:insert="~{/fragments/header :: header}"></div>
@@ -63,6 +73,28 @@
 					</div>
 					<div class="col-4">
 						<input class="form-control" type="text" th:field="*{email}">
+					</div>
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" th:errorClass="error" />
+					</div>
+				</div>
+				
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>How did you find us?</label>
+					</div>
+					<div class="col-4">
+						<!-- <input class="form-control" type="text" th:field="*{email}"> -->
+						<select class="form-select" th:field="*{howDidYouFindUs}" aria-label="Default select example" id="howDidYouFindUs" th:onchange="howDidYouFindUsCheckOthers()">
+						  <option selected value="">Select Option</option>
+						  <option value="Google">Google</option>
+						  <option value="Online advertisements">Online advertisements</option>
+						  <option value="Outdoor ads(board, flyers etc)">Outdoor ads(board, flyers etc)</option>
+						  <option value="Friend reference">Friend reference</option>
+						  <option value="Directly Found">Directly Found</option>
+						  <option value="Others">Others</option>	
+						</select>
+						<input hidden="hidden" th:field="*{howDidYouFindUs}" class="form-control mt-1" type="text" id="howDidYouFindUs_others" placeholder="In what other way you found us?">
 					</div>
 					<div class="col-3">
 						<div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" th:errorClass="error" />
