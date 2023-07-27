@@ -89,7 +89,7 @@ public class TreatmentController {
 		Treatment treatment = treatmentRepository.findById(treatmentId).get();
 		
 		
-		treatment.setHasPaid(true);
+		treatment.setFullyPaid(true);
 		treatmentRepository.save(treatment);
 		logger.info("Payment status for patient "+patient.getName()+" (treatment id : "+treatmentId+") changed to PAID");
 		

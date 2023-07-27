@@ -27,18 +27,18 @@
 	<div th:insert="~{/fragments/header :: header}"></div>
 	<div class="container text-center mb-5">
 		<a th:href="@{'/patients/edit/'+${patient.id}}">
-				<img th:src="@{/images/edit.jpg}" width="40" height="40">
+				<img th:src="@{/images/edit.jpg}" width="30" height="30" th:alt="edit">
 		</a>
 		<h2 th:text="${patient.name}"></h2>
 		
 		<h6>Patient ID : <span th:text="${patient.id}"/></h6>
 		<span th:text="${patient.addressLine1}+' '+${patient.addressLine2}+' '+${patient.city}+' '+${patient.state}+' '+${patient.country}"/>
 		<div class="row alert alert-secondary mt-2 text-center">
-			<div class="col-2" th:text="'BirthDate- '+${patient.dateOfBirth != null? patient.dateOfBirth:''}"></div>
-			<div class="col-2" th:text="'Mobile- '+${patient.mobile}"></div>
-			<div class="col-3" th:text="'Email- '+${patient.email}"></div>
-			<div class="col-3" th:text="'FoundUsBy- '+${patient.howDidYouFindUs}"></div>
-			<div class="col-2" th:text="'RegistrationDate- '+${patient.firstVisitDate}"></div>
+			<div class="col-2" th:text="'BirthDate: '+${patient.dateOfBirth != null? patient.dateOfBirth:''}"></div>
+			<div class="col-2" th:text="'Mobile: '+${patient.mobile}"></div>
+			<div class="col-3" th:text="'Email: '+${patient.email}"></div>
+			<div class="col-3" th:text="'FoundUsBy: '+${patient.howDidYouFindUs}"></div>
+			<div class="col-2" th:text="'RegistrationDate: '+${patient.firstVisitDate}"></div>
 		</div>
 		<hr/>
 		
@@ -51,10 +51,12 @@
 					<th class="col-1">Package</th>
 					<th class="col-1">Start Date</th>
 					<th class="col-1">Price</th>
+					<th class="col-1">Amount Paid</th>
+					<th class="col-1">Initial Payment Method</th>
+					<th class="col-1">Fully Paid</th>
 					<th class="col-1">Total Sessions</th>
 					<th class="col-1">Completed Sessions</th>
-					<th class="col-1">Has Paid</th>
-					<th class="col-3">Initial Diagnosis</th>
+					
 					<th class="col-1">Action</th>
 				</tr>
 			</thead>
@@ -64,14 +66,11 @@
 					<td class="col-1" th:text="${treatment.pkg.name}"></td>
 					<td class="col-1" th:text="${#temporals.format(treatment.startDate,'dd-MMM-yyyy HH:mm')}"></td>
 					<td class="col-1" th:text="${treatment.price}"></td>
-					<!-- <td class="col-1" th:text="${treatment.totalSessions}"></td>  -->
+					<td class="col-1" th:text="${treatment.amountPaid}"></td>
+					<td class="col-1" th:text="${treatment.initialPaymentMethod}"></td>
 					<td class="col-1">
-						<a class="btn btn-info" th:href="@{'/sessions/view/'+${treatment.id}}" th:text="${treatment.totalSessions}"></a>
-					</td>
-					<td class="col-1" th:text="${treatment.completedSessions}"></td>
-					<td class="col-1">
-						<span th:if="${treatment.hasPaid == true}">YES</span>
-						<span th:if="${treatment.hasPaid == false}">
+						<span th:if="${treatment.fullyPaid == true}">YES</span>
+						<span th:if="${treatment.fullyPaid == false}">
 							NO 
 							<span>
 								<a class="btn btn-warning ml-2" th:href="@{'/treatment/pay/'+${patient.id}+'/'+${treatment.id}}">Pay</a>
@@ -79,7 +78,13 @@
 						</span>
 						
 					</td>
-					<td class="col-3" th:text="${treatment.initialDiagnosis}"></td>
+					<!-- <td class="col-1" th:text="${treatment.totalSessions}"></td>  -->
+					<td class="col-1">
+						<a class="btn btn-info" th:href="@{'/sessions/view/'+${treatment.id}}" th:text="${treatment.totalSessions}"></a>
+					</td>
+					<td class="col-1" th:text="${treatment.completedSessions}"></td>
+					
+					
 					<td class="col-2">
 						<a th:href="@{'/treatment/edit/'+${patient.id}+'/'+${treatment.id}}" class="btn btn-info">Edit</a>
 						<a th:href="@{'/treatment/delete/'+${patient.id}+'/'+${treatment.id}}" class="btn btn-danger ml-2" th:onclick="deleteConfirmation([[${treatment.id}]], [[${treatment.pkg.name}]],  [[${#temporals.format(treatment.startDate,'dd-MMM-yyyy HH:mm')}]])">Delete</a>

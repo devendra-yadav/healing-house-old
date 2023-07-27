@@ -17,6 +17,21 @@
 			//alert(packageMap);
 			
 		}
+		
+		function checkFullyPaid(){
+			var price=document.getElementById('price').value;
+			var amountPaid=document.getElementById('amountPaid').value;
+			
+			if(amountPaid > price){
+				alert('Payment cant be more than price');
+			}else if(amountPaid == price){
+				document.getElementById('fullyPaid').checked="checked";
+			}else if(amountPaid < price){
+				document.getElementById('fullyPaid').checked="";
+			}
+			
+		}
+		
 	</script>
 </head>
 <body>
@@ -65,27 +80,50 @@
 						<div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" th:errorClass="error" />
 					</div>
 				</div>
+				
 				<div class="row mb-3">
 					<div class="col-2">
-						<label>Has Paid</label>
+						<label>Amount Paid</label>
 					</div>
-					<div class="col-4 form-check form-switch mt-2">
-						<input class="form-control form-check-input" type="checkbox" th:field="*{hasPaid}">
+					<div class="col-4">
+						<input class="form-control" type="number" th:field="*{amountPaid}" id="amountPaid" th:onchange="checkFullyPaid()">
 					</div>
-					
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('amountPaid')}" th:errors="*{amountPaid}" th:errorClass="error" />
+					</div>
 				</div>
 				
 				<div class="row mb-3">
 					<div class="col-2">
-						<label>Initial Diagnosis</label>
+						<label>Payment Method</label>
 					</div>
 					<div class="col-4">
-						<textarea rows="6" cols="30"  class="form-control" th:field="*{initialDiagnosis}"/>
+						<select class="form-control" th:field="*{initialPaymentMethod}">
+							<option selected value="">Choose payment method</option>
+							<option th:value="Cash">Cash</option>
+							<option th:value="UPI">UPI(PAYTM/GooglePay/PhonePe etc)</option>
+							<option th:value="OnlineBankTransfer">Online Bank Transfer</option>
+							<option th:value="CreditCard">POS Credit Card</option>
+							<option th:value="DebitCard">POS Dedit Card</option>
+							<option th:value="Others">Others</option>
+						</select>
 					</div>
 					<div class="col-3">
-						<div th:if="${#fields.hasErrors('initialDiagnosis')}" th:errors="*{initialDiagnosis}" th:errorClass="error" />
+						<div th:if="${#fields.hasErrors('initialPaymentMethod')}" th:errors="*{initialPaymentMethod}" th:errorClass="error" />
 					</div>
 				</div>
+				
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Fully Paid</label>
+					</div>
+					<div class="col-4 form-check form-switch mt-2">
+						<input class="form-control form-check-input" type="checkbox" th:field="*{fullyPaid}" id="fullyPaid">
+					</div>
+					
+				</div>
+				
+				
 				
 				<input type="hidden" th:field="*{patientId}" th:value="${patient}">
 			</div>

@@ -145,9 +145,15 @@ public class PatientsController {
 		}
 		
 		//Remove extra comma from the end
-		if(patient.getHowDidYouFindUs().endsWith(",")) {
+		while(patient.getHowDidYouFindUs().endsWith(",")) {
 			int lengthOfHowDidYouFindUs=patient.getHowDidYouFindUs().length();
 			patient.setHowDidYouFindUs(patient.getHowDidYouFindUs().substring(0, lengthOfHowDidYouFindUs-1));
+		}
+		
+		//Remove extra comma from the beginning
+		while(patient.getHowDidYouFindUs().startsWith(",")) {
+			int lengthOfHowDidYouFindUs=patient.getHowDidYouFindUs().length();
+			patient.setHowDidYouFindUs(patient.getHowDidYouFindUs().substring(1, lengthOfHowDidYouFindUs));
 		}
 		
 		patientRepository.save(patient);
