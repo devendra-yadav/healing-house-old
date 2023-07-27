@@ -43,6 +43,7 @@
 		<hr/>
 		
 		<a th:href="@{/treatment/select_treatment_form/{patient_id}(patient_id=${patient.id})}" class="btn btn-primary mb-2">New Treatment</a>
+		<a class="btn btn-primary mb-2" onclick="history.go(-1)">Back</a>
 		<h4>All Treatments</h4>
 		<table class="table table-striped text-start mt-2" id="patient-table">
 			<thead>
@@ -65,11 +66,15 @@
 					<td class="col-1" th:text="${treatment.pkg.name}"></td>
 					<td class="col-1" th:text="${#temporals.format(treatment.startDate,'dd-MMM-yyyy HH:mm')}"></td>
 					<td class="col-1" th:text="${treatment.price}"></td>
-					<td class="col-1" th:text="${treatment.amountPaid}"></td>
+					<td class="col-1" th:text="${treatmentPaymentMap.get(treatment.id)}"></td>
 					
 					<td class="col-1">
-						<span th:if="${treatment.fullyPaid == true}">YES</span>
-						<span th:if="${treatment.fullyPaid == false}">NO</span>
+						<span th:if="${treatment.fullyPaid == true}">YES
+							<a class="btn btn-info" th:href="@{'/payments/treatment/'+${treatment.id}}">Details</a>
+						</span>
+						<span th:if="${treatment.fullyPaid == false}">NO
+							<a class="btn btn-info" th:href="@{'/payments/treatment/'+${treatment.id}}"/>Details</a>
+						</span>
 						
 					</td>
 					<!-- <td class="col-1" th:text="${treatment.totalSessions}"></td>  -->

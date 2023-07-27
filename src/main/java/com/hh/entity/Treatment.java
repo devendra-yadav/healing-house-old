@@ -1,6 +1,7 @@
 package com.hh.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -11,12 +12,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Data
+@Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 public class Treatment {
 
@@ -30,8 +34,10 @@ public class Treatment {
 	private Package pkg;
 	@DateTimeFormat( pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime startDate = LocalDateTime.now();
-	private int price;
-	private Integer amountPaid;
+	private Integer price;
+	
+	@OneToMany(mappedBy = "treatment")
+	List<Payment> payments;
 	private int totalSessions;
 	private int completedSessions;
 	private boolean fullyPaid;
@@ -41,14 +47,19 @@ public class Treatment {
 		this.patient = patient;
 		this.pkg = pkg;
 		this.price = treatmentDto.getPrice();
-		this.amountPaid = treatmentDto.getAmountPaid();
 		this.totalSessions = treatmentDto.getTotalSessions();
 		this.completedSessions = 0;
-		if(amountPaid == price) {
-			this.fullyPaid = true;
-		}else {
-			this.fullyPaid = treatmentDto.isFullyPaid();
-		}
+		this.fullyPaid = treatmentDto.isFullyPaid();
 		
 	}
+
+
+	@Override
+	public String toString() {
+		return "Treatment [id=" + id + ", patient=" + patient + ", pkg=" + pkg + ", startDate=" + startDate + ", price="
+				+ price + ", payments=" + payments + ", totalSessions=" + totalSessions + ", completedSessions="
+				+ completedSessions + ", fullyPaid=" + fullyPaid + "]";
+	}
+	
+	
 }

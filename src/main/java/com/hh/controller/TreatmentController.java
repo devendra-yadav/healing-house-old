@@ -78,7 +78,7 @@ public class TreatmentController {
 		Treatment treatment = new Treatment(treatmentDto, patient, pkg);
 		treatment = treatmentRepository.save(treatment);
 		
-		Payment payment = new Payment(treatment, treatment.getAmountPaid(), treatment.getStartDate());
+		Payment payment = new Payment(treatment, treatmentDto.getAmountPaid(), treatmentDto.getPaymentMethod(), treatment.getStartDate());
 		paymentRepository.save(payment);		
 		logger.info("Treatment saved "+treatment);
 		
@@ -122,10 +122,11 @@ public class TreatmentController {
 		treatmentRepository.deleteById(treatmentId);
 		logger.info("deleted treatment id "+treatmentId+" for patient : "+patient);
 		
-		List<Treatment> allTreatments = treatmentRepository.findByPatient(patient);
-		model.addAttribute("allTreatments", allTreatments);
-		model.addAttribute("patient", patient);		
-		return "/patients/patient_details";
+		//List<Treatment> allTreatments = treatmentRepository.findByPatient(patient);
+		//model.addAttribute("allTreatments", allTreatments);
+		//model.addAttribute("patient", patient);		
+		//return "/patients/patient_details";
+		return "redirect:/patients/view/"+patient.getId();
 	}
 	
 	@GetMapping("/edit/{patientId}/{treatmentId}")

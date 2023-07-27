@@ -41,12 +41,19 @@
 			
 			var price=parseInt(document.getElementById('price').value,10);
 			var amountPaid=parseInt(document.getElementById('amountPaid').value,10);
+			var paymentMethod=document.getElementById('paymentMethod').value;
 			
 			if(pkg==""){
 				alert('Please choose a package');
 				event.preventDefault();
 			}else if(amountPaid > price){
 				alert('Amount Paid cant be more than Price');
+				event.preventDefault();
+			}else if(!(amountPaid >=0) ){ //this is to check NaN as NaN is never >= 0
+				alert('Please enter paid amount.');
+				event.preventDefault();
+			}else if(amountPaid > 0 && paymentMethod==""){
+				alert('Choose payment method');
 				event.preventDefault();
 			}else if(amountPaid == price){
 				document.getElementById('fullyPaid').checked="checked";
@@ -66,6 +73,7 @@
 		Patient ID : <span th:text="${patient.id}"/>
 		<hr/>
 		<a class="btn btn-primary mb-2" th:href="@{'/patients/view/'+${patient.id}}">All Treatments</a>
+		<a class="btn btn-primary mb-2" onclick="history.go(-1)">Back</a>
 		<h4 class="mb-3">New Treatment</h4>
 		
 		<form th:action="@{/treatment/select_treatment}" th:object="${treatment}" th:method="post">
@@ -124,7 +132,7 @@
 						<label>Payment Method</label>
 					</div>
 					<div class="col-4">
-						<select class="form-control" th:field="*{paymentMethod}">
+						<select class="form-control" th:field="*{paymentMethod}" id="paymentMethod">
 							<option selected value="">Choose payment method</option>
 							<option th:value="Cash">Cash</option>
 							<option th:value="UPI">UPI(PAYTM/GooglePay/PhonePe etc)</option>

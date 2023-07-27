@@ -1,6 +1,8 @@
 package com.hh.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,8 +108,19 @@ public class PatientsController {
 		logger.info("Fetching treatment records for patient id : "+patientId);
 		
 		List<Treatment> allTreatments = treatmentRepository.findByPatient(patient);
+		
+		//Create a map of treatmentId and corresponding total payment done.
+		Map<Integer, Integer> treatmentPaymentMap = new HashMap<>();
+		for(Treatment treatment: allTreatments) {
+			Integer totalPaymentDoneForTreatment = treatment.getPayments().stream().map((payment)->{
+				return payment.getPaymentAmount();
+			}).reduce(0,(a,b)->a+b);
+			treatmentPaymentMap.put(treatment.getId(), totalPaymentDoneForTreatment);
+		}
+		
 		logger.info("All treatments for Patient ("+patient.getId()+","+patient.getName()+") : "+allTreatments);
 		model.addAttribute("allTreatments", allTreatments);
+		model.addAttribute("treatmentPaymentMap", treatmentPaymentMap);
 		
 		return "/patients/patient_details";
 	}
