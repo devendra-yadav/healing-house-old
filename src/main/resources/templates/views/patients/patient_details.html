@@ -52,7 +52,6 @@
 					<th class="col-1">Start Date</th>
 					<th class="col-1">Price</th>
 					<th class="col-1">Amount Paid</th>
-					<th class="col-1">Initial Payment Method</th>
 					<th class="col-1">Fully Paid</th>
 					<th class="col-1">Total Sessions</th>
 					<th class="col-1">Completed Sessions</th>
@@ -67,15 +66,10 @@
 					<td class="col-1" th:text="${#temporals.format(treatment.startDate,'dd-MMM-yyyy HH:mm')}"></td>
 					<td class="col-1" th:text="${treatment.price}"></td>
 					<td class="col-1" th:text="${treatment.amountPaid}"></td>
-					<td class="col-1" th:text="${treatment.initialPaymentMethod}"></td>
+					
 					<td class="col-1">
 						<span th:if="${treatment.fullyPaid == true}">YES</span>
-						<span th:if="${treatment.fullyPaid == false}">
-							NO 
-							<span>
-								<a class="btn btn-warning ml-2" th:href="@{'/treatment/pay/'+${patient.id}+'/'+${treatment.id}}">Pay</a>
-							</span>
-						</span>
+						<span th:if="${treatment.fullyPaid == false}">NO</span>
 						
 					</td>
 					<!-- <td class="col-1" th:text="${treatment.totalSessions}"></td>  -->

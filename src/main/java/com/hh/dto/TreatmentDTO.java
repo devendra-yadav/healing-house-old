@@ -19,7 +19,7 @@ public class TreatmentDTO {
 	private LocalDateTime date;
 	private Integer price;
 	private Integer amountPaid;
-	private String initialPaymentMethod;
+	private String paymentMethod;
 	@Min(0)
 	private int totalSessions;
 	private int completedSessions;

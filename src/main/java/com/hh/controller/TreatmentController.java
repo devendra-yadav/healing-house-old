@@ -18,10 +18,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.hh.dto.TreatmentDTO;
 import com.hh.entity.Package;
 import com.hh.entity.Patient;
+import com.hh.entity.Payment;
 import com.hh.entity.Treatment;
 import com.hh.repository.PackageRepository;
 import com.hh.repository.PatientRepository;
+import com.hh.repository.PaymentRepository;
 import com.hh.repository.TreatmentRepository;
+
+import jakarta.transaction.Transactional;
 
 @Controller
 @RequestMapping("/treatment")
@@ -35,6 +39,9 @@ public class TreatmentController {
 	
 	@Autowired
 	private PatientRepository patientRepository;
+	
+	@Autowired
+	private PaymentRepository paymentRepository;
 	
 	private Logger logger = LoggerFactory.getLogger(TreatmentController.class);
 	
@@ -70,6 +77,9 @@ public class TreatmentController {
 		
 		Treatment treatment = new Treatment(treatmentDto, patient, pkg);
 		treatment = treatmentRepository.save(treatment);
+		
+		Payment payment = new Payment(treatment, treatment.getAmountPaid(), treatment.getStartDate());
+		paymentRepository.save(payment);		
 		logger.info("Treatment saved "+treatment);
 		
 		return "redirect:/patients/view/"+treatmentDto.getPatientId();
@@ -79,6 +89,7 @@ public class TreatmentController {
 	public String getTreatment(@PathVariable("treatment_id") Integer treatmentId, Model model ) {
 		Treatment treatment = treatmentRepository.findById(treatmentId).get();
 		logger.info("Treatment Details : "+treatment);
+		
 		
 		return "/home";
 	}
@@ -100,10 +111,14 @@ public class TreatmentController {
 	}
 	
 	@GetMapping("/delete/{patientId}/{treatmentId}")
+	@Transactional
 	public String deleteTreatment(@PathVariable("patientId") Integer patientId, @PathVariable("treatmentId") Integer treatmentId, Model model) {
 		Patient patient = patientRepository.findById(patientId).get();
 		logger.info("Request came to delete treatment id "+treatmentId+" for patient : "+patient);
 		
+		Treatment treatment = treatmentRepository.findById(treatmentId).get();
+		Long paymentRecordsDeleted = paymentRepository.removeByTreatment(treatment);
+		logger.info("Total of "+paymentRecordsDeleted+" payment records deleted for treatment :"+treatment);
 		treatmentRepository.deleteById(treatmentId);
 		logger.info("deleted treatment id "+treatmentId+" for patient : "+patient);
 		

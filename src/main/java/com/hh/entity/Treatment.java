@@ -32,7 +32,6 @@ public class Treatment {
 	private LocalDateTime startDate = LocalDateTime.now();
 	private int price;
 	private Integer amountPaid;
-	private String initialPaymentMethod;
 	private int totalSessions;
 	private int completedSessions;
 	private boolean fullyPaid;
@@ -43,7 +42,6 @@ public class Treatment {
 		this.pkg = pkg;
 		this.price = treatmentDto.getPrice();
 		this.amountPaid = treatmentDto.getAmountPaid();
-		this.initialPaymentMethod = treatmentDto.getInitialPaymentMethod();
 		this.totalSessions = treatmentDto.getTotalSessions();
 		this.completedSessions = 0;
 		if(amountPaid == price) {
