@@ -22,6 +22,6 @@ public class PaymentDTO {
 	private Integer treatmentId;
 	private Integer paymentAmount;
 	private String paymentMethod;
-	private LocalDateTime paymentDate;
+	private LocalDateTime paymentDate = LocalDateTime.now();
 
 }

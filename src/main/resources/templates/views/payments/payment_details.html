@@ -70,9 +70,31 @@
 						-->
 					</td>
 				</tr>
+				
 			</tbody>
 			
 		</table>
+		
+		
+		<div class="alert alert-success mt-3" th:if="${pendingAmount == 0}">
+			<b> ***** Total Payment Done : </b><span th:text="${totalPaymentDone}"/><b> *****</b>
+		</div>
+		
+		<div class="alert alert-warning mt-3" th:if="${pendingAmount > 0}">
+			<div class="row">
+				<div class="col-2"><b>Total Payment Done</b></div>
+				<div class="col-1" th:text="${totalPaymentDone}"></div>
+				<div class="col-1"></div>
+				<div class="col-2"><b>Pending Payment</b></div>
+				<div class="col-1" th:text="${pendingAmount}"></div>
+				<div class="col-1"></div>
+				<div class="col-2">
+					<a th:href="@{'/payments/treatment/'+${treatment.id}+'/payment_form'}" class="btn btn-info">Pay Pending Amount</a>
+				</div>
+			</div>
+			
+			
+		</div>
 		
 	</div>
 </body>
