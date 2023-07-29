@@ -34,7 +34,7 @@
 		<h6>Patient ID : <span th:text="${patient.id}"/></h6>
 		<span th:text="${patient.addressLine1}+' '+${patient.addressLine2}+' '+${patient.city}+' '+${patient.state}+' '+${patient.country}"/>
 		<div class="row alert alert-secondary mt-2 text-center">
-			<div class="col-2" th:text="'BirthDate: '+${patient.dateOfBirth != null? patient.dateOfBirth:''}"></div>
+			<div class="col-2" th:text="'BirthDate: '+${patient.dateOfBirth != null? #temporals.format(patient.dateOfBirth,'dd-MMM-yyyy'):''}"></div>
 			<div class="col-2" th:text="'Mobile: '+${patient.mobile}"></div>
 			<div class="col-3" th:text="'Email: '+${patient.email}"></div>
 			<div class="col-3" th:text="'FoundUsBy: '+${patient.howDidYouFindUs}"></div>
@@ -70,10 +70,10 @@
 					
 					<td class="col-1">
 						<span th:if="${treatment.fullyPaid == true}">YES
-							<a class="btn btn-info" th:href="@{'/payments/treatment/'+${treatment.id}}">Details</a>
+							<a class="btn btn-success" th:href="@{'/payments/treatment/'+${treatment.id}}">Details</a>
 						</span>
 						<span th:if="${treatment.fullyPaid == false}">NO
-							<a class="btn btn-info" th:href="@{'/payments/treatment/'+${treatment.id}}"/>Details</a>
+							<a class="btn btn-warning" th:href="@{'/payments/treatment/'+${treatment.id}}"/>Details</a>
 						</span>
 						
 					</td>

@@ -96,7 +96,7 @@ public class PaymentController {
 		int totalPaymentDone = payment.getTreatment().getPayments().stream().map((pymt)->pymt.getPaymentAmount()).reduce(0, (a,b)->a+b);
 		int totalTreatmentPrice = payment.getTreatment().getPrice();
 		
-		if(totalPaymentDone < totalTreatmentPrice && payment.getTreatment().isFullyPaid() == true) {
+		if((totalPaymentDone - payment.getPaymentAmount()) < totalTreatmentPrice && payment.getTreatment().isFullyPaid() == true) {
 			Treatment treatment = payment.getTreatment();
 			treatment.setFullyPaid(false);
 			treatmentRepository.save(treatment);
