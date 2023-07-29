@@ -120,11 +120,15 @@ public class TreatmentController {
 		Treatment treatment = treatmentRepository.findById(treatmentId).get();
 		logger.info("Request came to edit treatment "+treatment+" for patient : "+patient);
 		List<Package> allPackages = packageRepository.findAll();
+		
+		int totalAmountPaid = treatment.getPayments().stream().map((pymt)->pymt.getPaymentAmount()).reduce(0, (a,b)->a+b);
+		
+		model.addAttribute("totalAmountPaid", totalAmountPaid);
 		model.addAttribute("patient", patient);		
 		model.addAttribute("treatment", treatment);
 		model.addAttribute("all_packages", allPackages);
 		
-		return "/treatments/edit_treatment_form";
+		return "treatments/edit_treatment_form";
 	}
 	
 	@PostMapping("/edit_treatment")

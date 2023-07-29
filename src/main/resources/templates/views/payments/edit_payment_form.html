@@ -43,7 +43,7 @@
 		<h6>Patient ID : <span th:text="${treatment.patient.id}"/></h6>
 		<span th:text="${treatment.patient.addressLine1}+' '+${treatment.patient.addressLine2}+' '+${treatment.patient.city}+' '+${treatment.patient.state}+' '+${treatment.patient.country}"/>
 		<div class="row alert alert-secondary mt-2 text-center">
-			<div class="col-2" th:text="'BirthDate: '+${treatment.patient.dateOfBirth != null? treatment.patient.dateOfBirth:''}"></div>
+			<div class="col-2" th:text="'BirthDate: '+${treatment.patient.dateOfBirth != null? #temporals.format(treatment.patient.dateOfBirth,'dd-MMM-yyyy'):''}"></div>
 			<div class="col-2" th:text="'Mobile: '+${treatment.patient.mobile}"></div>
 			<div class="col-3" th:text="'Email: '+${treatment.patient.email}"></div>
 			<div class="col-3" th:text="'FoundUsBy: '+${treatment.patient.howDidYouFindUs}"></div>
@@ -54,7 +54,8 @@
 		<h5>Payment Details For Treatment Package '<span th:text="${treatment.pkg.name}"/>'</h5>
 		
 		<div class="row alert alert-light mt-2 text-center">
-			<div class="col-4" th:text="'StartDate: '+${#temporals.format(treatment.startDate,'dd-MMM-yyyy HH:mm')}"></div>
+			<div class="col-2" th:text="'TreatmentID: '+${treatment.id}"></div>
+			<div class="col-2" th:text="'StartDate: '+${#temporals.format(treatment.startDate,'dd-MMM-yyyy HH:mm')}"></div>
 			<div class="col-2" th:text="'Price: '+${treatment.price}"></div>
 			<div class="col-2" th:text="'TotalSessions: '+${treatment.totalSessions}"></div>
 			<div class="col-2" th:text="'CompletedSessions: '+${treatment.completedSessions}"></div>

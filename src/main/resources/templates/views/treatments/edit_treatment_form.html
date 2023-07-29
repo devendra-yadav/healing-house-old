@@ -24,7 +24,7 @@
 		
 		function checkFullyPaid(){
 			var price=parseInt(document.getElementById('price').value,10);
-			var amountPaid=parseInt(document.getElementById('amountPaid').value,10);
+			var amountPaid=parseInt(document.getElementById('totalAmountPaid').value,10);
 			
 			if(amountPaid > price){
 				alert('Amount Paid cant be more than Price');
@@ -40,20 +40,13 @@
 			var pkg = document.getElementById('pkg').value;
 			
 			var price=parseInt(document.getElementById('price').value,10);
-			var amountPaid=parseInt(document.getElementById('amountPaid').value,10);
-			var paymentMethod=document.getElementById('paymentMethod').value;
+			var amountPaid=parseInt(document.getElementById('totalAmountPaid').value,10);
 			
 			if(pkg==""){
 				alert('Please choose a package');
 				event.preventDefault();
 			}else if(amountPaid > price){
 				alert('Amount Paid cant be more than Price');
-				event.preventDefault();
-			}else if(!(amountPaid >=0) ){ //this is to check NaN as NaN is never >= 0
-				alert('Please enter paid amount.');
-				event.preventDefault();
-			}else if(amountPaid > 0 && paymentMethod==""){
-				alert('Choose payment method');
 				event.preventDefault();
 			}else if(amountPaid == price){
 				document.getElementById('fullyPaid').checked="checked";
@@ -72,8 +65,19 @@
 	<div class="container text-center">
 		<h2 th:text="${patient.name}"></h2>
 		Patient ID : <span th:text="${patient.id}"/>
+		
+		<span th:text="${patient.addressLine1}+' '+${patient.addressLine2}+' '+${patient.city}+' '+${patient.state}+' '+${patient.country}"/>
+		<div class="row alert alert-secondary mt-2 text-center">
+			<div class="col-2" th:text="'BirthDate: '+${patient.dateOfBirth != null? #temporals.format(patient.dateOfBirth,'dd-MMM-yyyy'):''}"></div>
+			<div class="col-2" th:text="'Mobile: '+${patient.mobile}"></div>
+			<div class="col-3" th:text="'Email: '+${patient.email}"></div>
+			<div class="col-3" th:text="'FoundUsBy: '+${patient.howDidYouFindUs}"></div>
+			<div class="col-2" th:text="'RegistrationDate: '+${#temporals.format(patient.firstVisitDate,'dd-MMM-yyyy HH:mm')}"></div>
+		</div>
+		
 		<hr/>
-		<a class="btn btn-primary mb-2" th:href="@{'/patients/view/'+${patient.id}}">All Treatments</a>
+		<a class="btn btn-primary mb-2" th:href="@{'/patients/view/'+${patient.id}}">Patient Details</a>
+		<a class="btn btn-primary mb-2" onclick="history.go(-1)">Back</a>
 		<h4 class="mb-3">Edit Treatment</h4>
 		
 		<form th:action="@{/treatment/edit_treatment}" th:object="${treatment}" th:method="post">
@@ -129,33 +133,19 @@
 					<div class="col-2">
 						<label>Amount Paid</label>
 					</div>
-					<div class="col-4">
-						<input class="form-control" type="number" th:field="*{amountPaid}" id="amountPaid" th:onchange="checkFullyPaid()">
-					</div>
-					<div class="col-3">
-						<div th:if="${#fields.hasErrors('amountPaid')}" th:errors="*{amountPaid}" th:errorClass="error" />
+					<div class="col-4 text-start">
+						<span th:text="${totalAmountPaid}"/>
+						<input type="hidden" th:value="*{payments}"/>
+						<input type="hidden" th:value="${totalAmountPaid}" id="totalAmountPaid"/>
 					</div>
 				</div>
 				
 				<div class="row mb-3">
 					<div class="col-2">
-						<label>Payment Method</label>
+						<label>Start Date</label>
 					</div>
 					<div class="col-4">
-						<select class="form-control" th:field="*{paymentMethod}" id="paymentMethod">
-							<option th:value="Cash">Cash</option>
-							<option th:value="PAYTM">PAYTM</option>
-							<option th:value="GooglePay">GooglePay</option>
-							<option th:value="PhonePe">PhonePe</option>
-							<option th:value="UPI">UPI</option>
-							<option th:value="OnlineBankTransfer">Online Bank Transfer</option>
-							<option th:value="CreditCard">POS Credit Card</option>
-							<option th:value="DebitCard">POS Dedit Card</option>
-							<option th:value="Others">Others</option>
-						</select>
-					</div>
-					<div class="col-3">
-						<div th:if="${#fields.hasErrors('paymentMethod')}" th:errors="*{paymentMethod}" th:errorClass="error" />
+						<input class="form-control" type="datetime-local" th:field="*{startDate}">
 					</div>
 				</div>
 				
@@ -169,61 +159,11 @@
 					
 				</div>
 				
-				<!--  <div class="row mb-3">
-					<div class="col-2">
-						<label>Package</label>
-					</div>
-					<div class="col-4">
-						<select class="form-control" th:field="*{pkg.id}" th:onchange="setDefaultValues()" id="pkg">
-							<option th:each="package : ${all_packages}" th:value="${package.id}" th:text="${package.name}">
-							</option>
-						</select>
-					</div>
+				<div>
+					<input type="hidden" th:field="*{totalSessions}"/>
+					<input type="hidden" th:field="*{completedSessions}"/>
+					<input type="hidden" th:field="*{startDate}"/>
 				</div>
-				<div class="row mb-3">
-					<div class="col-2">
-						<label>Total Sessions</label>
-					</div>
-					<div class="col-4">
-						<input class="form-control" type="number" th:field="*{totalSessions}" id="totalSessions">
-					</div>
-					<div class="col-3">
-						<div th:if="${#fields.hasErrors('totalSessions')}" th:errors="*{totalSessions}" th:errorClass="error" />
-					</div>
-				</div>
-				
-				<div class="row mb-3">
-					<div class="col-2">
-						<label>Price</label>
-					</div>
-					<div class="col-4">
-						<input class="form-control" type="number" th:field="*{price}" id="price">
-					</div>
-					<div class="col-3">
-						<div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" th:errorClass="error" />
-					</div>
-				</div>
-				<div class="row mb-3">
-					<div class="col-2">
-						<label>Has Paid</label>
-					</div>
-					<div class="col-4 form-check form-switch mt-2">
-						<input class="form-control form-check-input" type="checkbox" th:field="*{hasPaid}">
-					</div>
-					
-				</div>
-				
-				<div class="row mb-3">
-					<div class="col-2">
-						<label>Initial Diagnosis</label>
-					</div>
-					<div class="col-4">
-						<textarea rows="6" cols="30"  class="form-control" th:field="*{initialDiagnosis}"/>
-					</div>
-					<div class="col-3">
-						<div th:if="${#fields.hasErrors('initialDiagnosis')}" th:errors="*{initialDiagnosis}" th:errorClass="error" />
-					</div>
-				</div> -->
 				
 				<input type="hidden" th:field="*{patient}" th:value="${patient}">
 			</div>

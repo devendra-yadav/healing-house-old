@@ -50,7 +50,8 @@
 		<h5>Payment Details For Treatment Package '<span th:text="${treatment.pkg.name}"/>'</h5>
 		
 		<div class="row alert alert-light mt-2 text-center">
-			<div class="col-4" th:text="'StartDate: '+${#temporals.format(treatment.startDate,'dd-MMM-yyyy HH:mm')}"></div>
+			<div class="col-2" th:text="'TreatmentID: '+${treatment.id}"></div>
+			<div class="col-2" th:text="'StartDate: '+${#temporals.format(treatment.startDate,'dd-MMM-yyyy HH:mm')}"></div>
 			<div class="col-2" th:text="'Price: '+${treatment.price}"></div>
 			<div class="col-2" th:text="'TotalSessions: '+${treatment.totalSessions}"></div>
 			<div class="col-2" th:text="'CompletedSessions: '+${treatment.completedSessions}"></div>
