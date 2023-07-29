@@ -2,8 +2,6 @@ package com.hh.dto;
 
 import java.time.LocalDateTime;
 
-import com.hh.entity.Patient;
-
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;

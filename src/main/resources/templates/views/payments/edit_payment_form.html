@@ -7,13 +7,17 @@
 	<script type="text/javascript" th:src="@{/cssandjs/bootstrap.bundle.min.js}"></script>
 	
 	<script type="text/javascript">
+	
 		function formCheckBeforeSubmit(){
-			var pendingAmount = parseInt(document.getElementById('pendingAmount').value,10);
+			
+			var originalPaymentAmount = parseInt(document.getElementById('originalPaymentAmount').value,10);
 			var paymentAmount = parseInt(document.getElementById('paymentAmount').value,10);
+			var totalPaymentDone = parseInt(document.getElementById('totalPaymentDone').value,10);
+			var price = parseInt(document.getElementById('price').value,10);
 			var paymentMethod = document.getElementById('paymentMethod').value;
 			
-			if(paymentAmount>pendingAmount){
-				alert("Payment Amount is larger than Pending Amount. Please check!!");
+			if((totalPaymentDone-originalPaymentAmount+paymentAmount) > price){
+				alert("This amount will make TOTAL PAYMENT more than PRICE. Please check!!");
 				event.preventDefault();	
 			}else if(!(paymentAmount>0)){
 				alert('Please enter proper payment amount');
@@ -60,8 +64,16 @@
 		<a class="btn btn-primary mb-2" th:href="@{'/patients/view/'+${treatment.patient.id}}">Patient Details</a>
 		<a class="btn btn-primary mb-2" onclick="history.go(-1)">Back</a>
 		
-		<form th:action="@{'/payments/makePayment/'+${treatment.id}}" th:method="post" th:object="${paymentDto}" >
+		<form th:action="@{/payments/edit_payment}" th:method="post" th:object="${payment}" >
 			<div class="table">
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Payment ID</label>
+					</div>
+					<div class="col-4 text-start">
+						<span th:text="${payment.id}">
+					</div>
+				</div>
 				<div class="row mb-3">
 					<div class="col-2">
 						<label>Total Payment Done</label>
@@ -78,10 +90,16 @@
 						<span th:text="${pendingAmount}">
 					</div>
 					<input type="hidden" id="pendingAmount" th:value="${pendingAmount}"/>
+					<input type="hidden" id="price" th:value="${treatment.price}"/>
+					<input type="hidden" id="totalPaymentDone" th:value="${totalPaymentDone}"/>
+					<input type="hidden" id="originalPaymentAmount" th:value="*{paymentAmount}"/>
+					<input type="hidden" th:field="*{treatment}"/>
+					<input type="hidden" th:field="*{id}"/>
+					<input type="hidden" th:field="*{paymentDate}"/>
 				</div>
 				<div class="row mb-3">
 					<div class="col-2">
-						<label>Amount To Pay</label>
+						<label>Amount Paid</label>
 					</div>
 					<div class="col-4">
 						<input class="form-control" type="number" th:field="*{paymentAmount}" id="paymentAmount">
@@ -93,7 +111,6 @@
 					</div>
 					<div class="col-4">
 						<select class="form-control" th:field="*{paymentMethod}" id="paymentMethod">
-							<option selected value="">Choose payment method</option>
 							<option th:value="Cash">Cash</option>
 							<option th:value="UPI">UPI(PAYTM/GooglePay/PhonePe etc)</option>
 							<option th:value="OnlineBankTransfer">Online Bank Transfer</option>

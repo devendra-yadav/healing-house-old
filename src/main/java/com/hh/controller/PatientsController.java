@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hh.dto.PatientDTO;
-import com.hh.entity.Package;
 import com.hh.entity.Patient;
 import com.hh.entity.Treatment;
 import com.hh.repository.PatientRepository;

@@ -71,7 +71,82 @@ public class PaymentController {
 		Payment payment = new Payment(treatment, paymentDto.getPaymentAmount(), paymentDto.getPaymentMethod(), paymentDto.getPaymentDate());
 		paymentRepository.save(payment);
 		
+		//Check if all payments done.
+		int totalPaymentDone = treatment.getPayments().stream().map((pymt)->pymt.getPaymentAmount()).reduce(0, (a,b)->a+b);
+		int totalTreatmentPrice = treatment.getPrice();
+		
+		if(totalPaymentDone == totalTreatmentPrice) {
+			treatment.setFullyPaid(true);
+			treatmentRepository.save(treatment);
+			logger.info("Full payment done for teatment : "+treatment);
+		}else if(totalPaymentDone < totalTreatmentPrice && treatment.isFullyPaid() == true){
+			treatment.setFullyPaid(false);
+			treatmentRepository.save(treatment);
+			logger.info("Full payment status changed to 'NOT FULLY PAID' for teatment : "+treatment);
+		}
 		
 		return "redirect:/payments/treatment/"+treatmentId;
 	}
+	
+	@GetMapping("/delete/{payment_id}")
+	public String deletePayment(@PathVariable("payment_id") Integer paymentId, Model model) {
+		Payment payment = paymentRepository.findById(paymentId).get();
+		
+		//Check if all payments done.
+		int totalPaymentDone = payment.getTreatment().getPayments().stream().map((pymt)->pymt.getPaymentAmount()).reduce(0, (a,b)->a+b);
+		int totalTreatmentPrice = payment.getTreatment().getPrice();
+		
+		if(totalPaymentDone < totalTreatmentPrice && payment.getTreatment().isFullyPaid() == true) {
+			Treatment treatment = payment.getTreatment();
+			treatment.setFullyPaid(false);
+			treatmentRepository.save(treatment);
+			logger.info("Full payment status changed from 'DONE' to 'NOT DONE' for teatment : "+treatment);
+		}
+		
+		paymentRepository.deleteById(paymentId);
+		logger.info("deleted payment : "+payment);
+		
+		return "redirect:/payments/treatment/"+payment.getTreatment().getId();
+	}
+	
+	@GetMapping("/edit_payment_form/{payment_id}")
+	public String editPaymentForm(@PathVariable("payment_id") Integer paymentId, Model model) {
+		
+		Payment payment = paymentRepository.findById(paymentId).get();
+		
+		logger.info("Request came to edit payment : "+payment);
+		int totalPaymentDone = payment.getTreatment().getPayments().stream().map((pymt->pymt.getPaymentAmount())).reduce(0, (a,b)->a+b);
+		int pendingAmount = payment.getTreatment().getPrice() - totalPaymentDone;
+		
+		
+		model.addAttribute("totalPaymentDone", totalPaymentDone);
+		model.addAttribute("pendingAmount", pendingAmount);
+		model.addAttribute("payment", payment);
+		model.addAttribute("treatment", payment.getTreatment());
+		
+		
+		return "payments/edit_payment_form";
+	}
+	
+	@PostMapping("/edit_payment")
+	public String editPayment(@ModelAttribute("payment") Payment payment, Model model) {
+		logger.info("Edited payment : "+payment);
+		paymentRepository.save(payment);
+		
+		int totalTreatmentPrice = payment.getTreatment().getPrice();
+		int totalPaymentDone = payment.getTreatment().getPayments().stream().map((pymt->pymt.getPaymentAmount())).reduce(0, (a,b)->a+b);
+		
+		if(totalPaymentDone < totalTreatmentPrice && payment.getTreatment().isFullyPaid() == true) {
+			Treatment treatment = payment.getTreatment();
+			treatment.setFullyPaid(false);
+			treatmentRepository.save(treatment);
+			logger.info("Full payment status changed from 'DONE' to 'NOT DONE' for teatment : "+treatment);
+		}
+		
+		logger.info("Edited payment : "+payment);
+		
+		
+		return "redirect:/payments/treatment/"+payment.getTreatment().getId();
+	}
+	
 }

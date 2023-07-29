@@ -12,6 +12,14 @@
 		$(document).ready(function(){
 			$("#payments-table").DataTable();
 		})
+		
+		function deleteConfirmation(paymentId, treatmentPackageName, paymentAmount, paymentDate){
+			if(confirm('Are you sure, you want to delete the payment id "'+paymentId+'" of "'+paymentAmount+'" INR done on "'+paymentDate+'" for treatment package "'+treatmentPackageName+'"?')){
+				return true;
+			}else{
+				event.preventDefault();
+			}
+		}
 	
 	</script>
 </head>
@@ -34,7 +42,7 @@
 		</div>
 		<hr/>
 		
-		<h5>Payment Details For Treatment Package '<span th:text="${treatment.pkg.name}"/>'</h5>
+		<h5>Payment Details For '<span th:text="${treatment.pkg.name}"/>'</h5>
 		
 		<div class="row alert alert-light mt-2 text-center">
 			<div class="col-4" th:text="'StartDate: '+${#temporals.format(treatment.startDate,'dd-MMM-yyyy HH:mm')}"></div>
@@ -44,7 +52,7 @@
 			<div class="col-2" th:text="'FullyPaid: '+${treatment.fullyPaid}"></div>
 		</div>
 		
-		<a th:href="@{/treatment/select_treatment_form/}" class="btn btn-primary mb-2">New Treatment</a>
+		<a class="btn btn-primary mb-2" th:href="@{'/patients/view/'+${treatment.patient.id}}">Patient Details</a>
 		<a class="btn btn-primary mb-2" onclick="history.go(-1)">Back</a>
 		
 		<table class="table table-striped text-start mt-2" id="payments-table">
@@ -65,9 +73,8 @@
 					<td class="col-1" th:text="${payment.paymentMethod}"></td>
 	
 					<td class="col-2">
-						<!--  <a th:href="@{'/treatment/edit/'+${patient.id}+'/'+${treatment.id}}" class="btn btn-info">Edit</a>
-						<a th:href="@{'/treatment/delete/'+${patient.id}+'/'+${treatment.id}}" class="btn btn-danger ml-2" th:onclick="deleteConfirmation([[${treatment.id}]], [[${treatment.pkg.name}]],  [[${#temporals.format(treatment.startDate,'dd-MMM-yyyy HH:mm')}]])">Delete</a>
-						-->
+						<a th:href="@{'/payments/edit_payment_form/'+${payment.id}}" class="btn btn-info">Edit</a>
+						<a th:href="@{'/payments/delete/'+${payment.id}}" class="btn btn-danger ml-2" th:onclick="deleteConfirmation([[${payment.id}]], [[${treatment.pkg.name}]],[[${payment.paymentAmount}]],  [[${#temporals.format(payment.paymentDate,'dd-MMM-yyyy HH:mm')}]])">Delete</a>
 					</td>
 				</tr>
 				
@@ -89,7 +96,7 @@
 				<div class="col-1" th:text="${pendingAmount}"></div>
 				<div class="col-1"></div>
 				<div class="col-2">
-					<a th:href="@{'/payments/treatment/'+${treatment.id}+'/payment_form'}" class="btn btn-info">Pay Pending Amount</a>
+					<a th:href="@{'/payments/treatment/'+${treatment.id}+'/payment_form'}" class="btn btn-success">Pay Pending Amount</a>
 				</div>
 			</div>
 			
