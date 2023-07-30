@@ -39,6 +39,12 @@
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-thymeleaf</artifactId>
+		    <exclusions> <!-- this exclusion is added to make sure dev tools works fine.-->
+			    <exclusion>
+			        <groupId>org.javassist</groupId>
+			        <artifactId>javassist</artifactId>
+			    </exclusion>
+			</exclusions>
 		</dependency>
 
 

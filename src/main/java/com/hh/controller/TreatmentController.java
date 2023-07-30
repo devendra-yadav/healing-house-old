@@ -137,6 +137,7 @@ public class TreatmentController {
 		treatment = treatmentRepository.save(treatment);
 		logger.info("Treatment updated "+treatment);
 		
+		
 		return "redirect:/patients/view/"+treatment.getPatient().getId();
 	}
 }
