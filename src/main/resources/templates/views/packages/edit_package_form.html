@@ -17,6 +17,7 @@
 		<h2>Edit Package</h2>
 		
 		<a th:href="@{/packages/view_packages}" class="btn btn-primary">All Packages</a>
+		<a class="btn btn-primary" onclick="history.go(-1)">Back</a>
 		<hr/>
 		<form th:action="@{/packages/edit_package}" th:object="${package}" th:method="post">
 		

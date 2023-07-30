@@ -28,6 +28,7 @@
 	<div class="container text-center">
 		<h2>Edit Patient</h2>
 		<a th:href="@{/patients/view_patients}" class="btn btn-primary">All Patients</a>
+		<a class="btn btn-primary" onclick="history.go(-1)">Back</a>
 		<hr/>
 		<form th:action="@{/patients/edit_patient}" th:object="${patient}" th:method="POST">
 		
