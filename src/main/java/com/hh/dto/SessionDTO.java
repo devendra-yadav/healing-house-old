@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor @AllArgsConstructor
 public class SessionDTO {
 	
+	private int sessionNumber;
 	
 	private String leftPulseSI;
 	private String leftPulseHT;
