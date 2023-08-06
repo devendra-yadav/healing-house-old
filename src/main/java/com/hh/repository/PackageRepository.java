@@ -7,5 +7,5 @@ import com.hh.entity.Package;
 
 @Repository
 public interface PackageRepository extends JpaRepository<Package, Integer> {
-
+	
 }
