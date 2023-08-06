@@ -2,8 +2,6 @@ package com.hh.dto;
 
 import java.time.LocalDateTime;
 
-import com.hh.entity.Patient;
-
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,10 +16,12 @@ public class TreatmentDTO {
 	private Integer packageId;
 	private LocalDateTime date;
 	private Integer price;
+	private Integer amountPaid;
+	private String paymentMethod;
 	@Min(0)
 	private int totalSessions;
 	private int completedSessions;
-	private boolean hasPaid;
-	private String initialDiagnosis;
+	private boolean fullyPaid;
+	
 	
 }

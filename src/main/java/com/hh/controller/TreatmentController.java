@@ -18,10 +18,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.hh.dto.TreatmentDTO;
 import com.hh.entity.Package;
 import com.hh.entity.Patient;
+import com.hh.entity.Payment;
 import com.hh.entity.Treatment;
 import com.hh.repository.PackageRepository;
 import com.hh.repository.PatientRepository;
+import com.hh.repository.PaymentRepository;
 import com.hh.repository.TreatmentRepository;
+
+import jakarta.transaction.Transactional;
 
 @Controller
 @RequestMapping("/treatment")
@@ -35,6 +39,9 @@ public class TreatmentController {
 	
 	@Autowired
 	private PatientRepository patientRepository;
+	
+	@Autowired
+	private PaymentRepository paymentRepository;
 	
 	private Logger logger = LoggerFactory.getLogger(TreatmentController.class);
 	
@@ -70,6 +77,9 @@ public class TreatmentController {
 		
 		Treatment treatment = new Treatment(treatmentDto, patient, pkg);
 		treatment = treatmentRepository.save(treatment);
+		
+		Payment payment = new Payment(treatment, treatmentDto.getAmountPaid(), treatmentDto.getPaymentMethod(), treatment.getStartDate());
+		paymentRepository.save(payment);		
 		logger.info("Treatment saved "+treatment);
 		
 		return "redirect:/patients/view/"+treatmentDto.getPatientId();
@@ -80,37 +90,28 @@ public class TreatmentController {
 		Treatment treatment = treatmentRepository.findById(treatmentId).get();
 		logger.info("Treatment Details : "+treatment);
 		
+		
 		return "/home";
 	}
 	
-	@GetMapping("/pay/{patientId}/{treatmentId}")
-	public String makePayment(@PathVariable("patientId") Integer patientId, @PathVariable("treatmentId") Integer treatmentId, Model model) {
-		Patient patient = patientRepository.findById(patientId).get();
-		Treatment treatment = treatmentRepository.findById(treatmentId).get();
-		
-		
-		treatment.setHasPaid(true);
-		treatmentRepository.save(treatment);
-		logger.info("Payment status for patient "+patient.getName()+" (treatment id : "+treatmentId+") changed to PAID");
-		
-		List<Treatment> allTreatments = treatmentRepository.findByPatient(patient);
-		model.addAttribute("allTreatments", allTreatments);
-		model.addAttribute("patient", patient);		
-		return "/patients/patient_details";
-	}
 	
 	@GetMapping("/delete/{patientId}/{treatmentId}")
+	@Transactional
 	public String deleteTreatment(@PathVariable("patientId") Integer patientId, @PathVariable("treatmentId") Integer treatmentId, Model model) {
 		Patient patient = patientRepository.findById(patientId).get();
 		logger.info("Request came to delete treatment id "+treatmentId+" for patient : "+patient);
 		
+		Treatment treatment = treatmentRepository.findById(treatmentId).get();
+		Long paymentRecordsDeleted = paymentRepository.removeByTreatment(treatment);
+		logger.info("Total of "+paymentRecordsDeleted+" payment records deleted for treatment :"+treatment);
 		treatmentRepository.deleteById(treatmentId);
 		logger.info("deleted treatment id "+treatmentId+" for patient : "+patient);
 		
-		List<Treatment> allTreatments = treatmentRepository.findByPatient(patient);
-		model.addAttribute("allTreatments", allTreatments);
-		model.addAttribute("patient", patient);		
-		return "/patients/patient_details";
+		//List<Treatment> allTreatments = treatmentRepository.findByPatient(patient);
+		//model.addAttribute("allTreatments", allTreatments);
+		//model.addAttribute("patient", patient);		
+		//return "/patients/patient_details";
+		return "redirect:/patients/view/"+patient.getId();
 	}
 	
 	@GetMapping("/edit/{patientId}/{treatmentId}")
@@ -119,11 +120,15 @@ public class TreatmentController {
 		Treatment treatment = treatmentRepository.findById(treatmentId).get();
 		logger.info("Request came to edit treatment "+treatment+" for patient : "+patient);
 		List<Package> allPackages = packageRepository.findAll();
+		
+		int totalAmountPaid = treatment.getPayments().stream().map((pymt)->pymt.getPaymentAmount()).reduce(0, (a,b)->a+b);
+		
+		model.addAttribute("totalAmountPaid", totalAmountPaid);
 		model.addAttribute("patient", patient);		
 		model.addAttribute("treatment", treatment);
 		model.addAttribute("all_packages", allPackages);
 		
-		return "/treatments/edit_treatment_form";
+		return "treatments/edit_treatment_form";
 	}
 	
 	@PostMapping("/edit_treatment")
@@ -131,6 +136,7 @@ public class TreatmentController {
 		logger.info("request to update treatment. updated treatment "+treatment);
 		treatment = treatmentRepository.save(treatment);
 		logger.info("Treatment updated "+treatment);
+		
 		
 		return "redirect:/patients/view/"+treatment.getPatient().getId();
 	}

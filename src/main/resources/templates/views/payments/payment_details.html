@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="ISO-8859-1">
+	<title th:text="#{healing.house.title}"></title>
+	<link rel="stylesheet" th:href="@{/cssandjs/bootstrap.min.css}"></link>
+	<script type="text/javascript" th:src="@{/cssandjs/bootstrap.bundle.min.js}"></script>
+	<link th:href="@{/cssandjs/datatables.min.css}" rel="stylesheet">
+	<script th:src="@{/cssandjs/datatables.min.js}"></script>
+	<script type="text/javascript">
+	
+		$(document).ready(function(){
+			$("#payments-table").DataTable();
+		})
+		
+		function deleteConfirmation(paymentId, treatmentPackageName, paymentAmount, paymentDate){
+			if(confirm('Are you sure, you want to delete the payment id "'+paymentId+'" of "'+paymentAmount+'" INR done on "'+paymentDate+'" for treatment package "'+treatmentPackageName+'"?')){
+				return true;
+			}else{
+				event.preventDefault();
+			}
+		}
+	
+	</script>
+</head>
+<body>
+	<div th:insert="~{/fragments/header :: header}"></div>
+	<div class="container text-center">
+		<a th:href="@{'/patients/edit/'+${treatment.patient.id}}">
+				<img th:src="@{/images/edit.jpg}" width="30" height="30" th:alt="edit">
+		</a>
+		<h2 th:text="${treatment.patient.name}"></h2>
+		
+		<h6>Patient ID : <span th:text="${treatment.patient.id}"/></h6>
+		<span th:text="${treatment.patient.addressLine1}+' '+${treatment.patient.addressLine2}+' '+${treatment.patient.city}+' '+${treatment.patient.state}+' '+${treatment.patient.country}"/>
+		<div class="row alert alert-secondary mt-2 text-center">
+			<div class="col-2" th:text="'BirthDate: '+${treatment.patient.dateOfBirth != null? #temporals.format(treatment.patient.dateOfBirth,'dd-MMM-yyyy'):''}"></div>
+			<div class="col-2" th:text="'Mobile: '+${treatment.patient.mobile}"></div>
+			<div class="col-3" th:text="'Email: '+${treatment.patient.email}"></div>
+			<div class="col-3" th:text="'FoundUsBy: '+${treatment.patient.howDidYouFindUs}"></div>
+			<div class="col-2" th:text="'RegistrationDate: '+${#temporals.format(treatment.patient.firstVisitDate,'dd-MMM-yyyy HH:mm')}"></div>
+		</div>
+		<hr/>
+		
+		<h5>Payment Details For '<span th:text="${treatment.pkg.name}"/>'</h5>
+		
+		<div class="row alert alert-light mt-2 text-center">
+			<div class="col-2" th:text="'TreatmentID: '+${treatment.id}"></div>
+			<div class="col-2" th:text="'StartDate: '+${#temporals.format(treatment.startDate,'dd-MMM-yyyy HH:mm')}"></div>
+			<div class="col-2" th:text="'Price: '+${treatment.price}"></div>
+			<div class="col-2" th:text="'TotalSessions: '+${treatment.totalSessions}"></div>
+			<div class="col-2" th:text="'CompletedSessions: '+${treatment.completedSessions}"></div>
+			<div class="col-2" th:text="'FullyPaid: '+${treatment.fullyPaid}"></div>
+		</div>
+		
+		<a class="btn btn-primary mb-2" th:href="@{'/patients/view/'+${treatment.patient.id}}">Patient Details</a>
+		<a class="btn btn-primary mb-2" onclick="history.go(-1)">Back</a>
+		
+		<table class="table table-striped text-start mt-2" id="payments-table">
+			<thead>
+				<tr>
+					<th class="col-1">ID</th>
+					<th class="col-1">Payment Amount</th>
+					<th class="col-1">Payment Date</th>
+					<th class="col-1">Payment Method</th>
+					<th class="col-1">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="payment: ${treatment.payments}" >
+					<td class="col-1" th:text="${payment.id}"></td>
+					<td class="col-1" th:text="${payment.paymentAmount}"></td>
+					<td class="col-1" th:text="${#temporals.format(payment.paymentDate,'dd-MMM-yyyy HH:mm')}"></td>
+					<td class="col-1" th:text="${payment.paymentMethod}"></td>
+	
+					<td class="col-2">
+						<a th:href="@{'/payments/edit_payment_form/'+${payment.id}}" class="btn btn-info">Edit</a>
+						<a th:href="@{'/payments/delete/'+${payment.id}}" class="btn btn-danger ml-2" th:onclick="deleteConfirmation([[${payment.id}]], [[${treatment.pkg.name}]],[[${payment.paymentAmount}]],  [[${#temporals.format(payment.paymentDate,'dd-MMM-yyyy HH:mm')}]])">Delete</a>
+					</td>
+				</tr>
+				
+			</tbody>
+			
+		</table>
+		
+		
+		<div class="alert alert-success mt-3" th:if="${pendingAmount == 0}">
+			<b> ***** Total Payment Done : </b><span th:text="${totalPaymentDone}"/><b> *****</b>
+		</div>
+		
+		<div class="alert alert-warning mt-3" th:if="${pendingAmount > 0}">
+			<div class="row">
+				<div class="col-2"><b>Total Payment Done</b></div>
+				<div class="col-1" th:text="${totalPaymentDone}"></div>
+				<div class="col-1"></div>
+				<div class="col-2"><b>Pending Payment</b></div>
+				<div class="col-1" th:text="${pendingAmount}"></div>
+				<div class="col-1"></div>
+				<div class="col-2">
+					<a th:href="@{'/payments/treatment/'+${treatment.id}+'/payment_form'}" class="btn btn-success">Pay Pending Amount</a>
+				</div>
+			</div>
+			
+			
+		</div>
+		
+	</div>
+</body>
+</html>

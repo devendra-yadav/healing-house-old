@@ -1,6 +1,8 @@
 package com.hh.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hh.dto.PatientDTO;
-import com.hh.entity.Package;
 import com.hh.entity.Patient;
 import com.hh.entity.Treatment;
 import com.hh.repository.PatientRepository;
@@ -106,8 +107,19 @@ public class PatientsController {
 		logger.info("Fetching treatment records for patient id : "+patientId);
 		
 		List<Treatment> allTreatments = treatmentRepository.findByPatient(patient);
+		
+		//Create a map of treatmentId and corresponding total payment done.
+		Map<Integer, Integer> treatmentPaymentMap = new HashMap<>();
+		for(Treatment treatment: allTreatments) {
+			Integer totalPaymentDoneForTreatment = treatment.getPayments().stream().map((payment)->{
+				return payment.getPaymentAmount();
+			}).reduce(0,(a,b)->a+b);
+			treatmentPaymentMap.put(treatment.getId(), totalPaymentDoneForTreatment);
+		}
+		
 		logger.info("All treatments for Patient ("+patient.getId()+","+patient.getName()+") : "+allTreatments);
 		model.addAttribute("allTreatments", allTreatments);
+		model.addAttribute("treatmentPaymentMap", treatmentPaymentMap);
 		
 		return "/patients/patient_details";
 	}
@@ -145,9 +157,15 @@ public class PatientsController {
 		}
 		
 		//Remove extra comma from the end
-		if(patient.getHowDidYouFindUs().endsWith(",")) {
+		while(patient.getHowDidYouFindUs().endsWith(",")) {
 			int lengthOfHowDidYouFindUs=patient.getHowDidYouFindUs().length();
 			patient.setHowDidYouFindUs(patient.getHowDidYouFindUs().substring(0, lengthOfHowDidYouFindUs-1));
+		}
+		
+		//Remove extra comma from the beginning
+		while(patient.getHowDidYouFindUs().startsWith(",")) {
+			int lengthOfHowDidYouFindUs=patient.getHowDidYouFindUs().length();
+			patient.setHowDidYouFindUs(patient.getHowDidYouFindUs().substring(1, lengthOfHowDidYouFindUs));
 		}
 		
 		patientRepository.save(patient);

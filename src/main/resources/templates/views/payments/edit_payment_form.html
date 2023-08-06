@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="ISO-8859-1">
+	<title th:text="#{healing.house.title}"></title>
+	<link rel="stylesheet" th:href="@{/cssandjs/bootstrap.min.css}"></link>
+	<script type="text/javascript" th:src="@{/cssandjs/bootstrap.bundle.min.js}"></script>
+	
+	<script type="text/javascript">
+	
+		function formCheckBeforeSubmit(){
+			
+			var originalPaymentAmount = parseInt(document.getElementById('originalPaymentAmount').value,10);
+			var paymentAmount = parseInt(document.getElementById('paymentAmount').value,10);
+			var totalPaymentDone = parseInt(document.getElementById('totalPaymentDone').value,10);
+			var price = parseInt(document.getElementById('price').value,10);
+			var paymentMethod = document.getElementById('paymentMethod').value;
+			
+			if((totalPaymentDone-originalPaymentAmount+paymentAmount) > price){
+				alert("This amount will make TOTAL PAYMENT more than PRICE. Please check!!");
+				event.preventDefault();	
+			}else if(!(paymentAmount>0)){
+				alert('Please enter proper payment amount');
+				event.preventDefault();
+			}else if(paymentMethod==""){
+				alert('Please select payment method');
+				event.preventDefault();	
+			}
+			
+			return true;
+		}
+	</script>
+	
+</head>
+<body>
+	<div th:insert="~{/fragments/header :: header}"></div>
+	<div class="container text-center">
+		<a th:href="@{'/patients/edit/'+${treatment.patient.id}}">
+				<img th:src="@{/images/edit.jpg}" width="30" height="30" th:alt="edit">
+		</a>
+		<h2 th:text="${treatment.patient.name}"></h2>
+		
+		<h6>Patient ID : <span th:text="${treatment.patient.id}"/></h6>
+		<span th:text="${treatment.patient.addressLine1}+' '+${treatment.patient.addressLine2}+' '+${treatment.patient.city}+' '+${treatment.patient.state}+' '+${treatment.patient.country}"/>
+		<div class="row alert alert-secondary mt-2 text-center">
+			<div class="col-2" th:text="'BirthDate: '+${treatment.patient.dateOfBirth != null? #temporals.format(treatment.patient.dateOfBirth,'dd-MMM-yyyy'):''}"></div>
+			<div class="col-2" th:text="'Mobile: '+${treatment.patient.mobile}"></div>
+			<div class="col-3" th:text="'Email: '+${treatment.patient.email}"></div>
+			<div class="col-3" th:text="'FoundUsBy: '+${treatment.patient.howDidYouFindUs}"></div>
+			<div class="col-2" th:text="'RegistrationDate: '+${#temporals.format(treatment.patient.firstVisitDate,'dd-MMM-yyyy HH:mm')}"></div>
+		</div>
+		<hr/>
+		
+		<h5>Payment Details For Treatment Package '<span th:text="${treatment.pkg.name}"/>'</h5>
+		
+		<div class="row alert alert-light mt-2 text-center">
+			<div class="col-2" th:text="'TreatmentID: '+${treatment.id}"></div>
+			<div class="col-2" th:text="'StartDate: '+${#temporals.format(treatment.startDate,'dd-MMM-yyyy HH:mm')}"></div>
+			<div class="col-2" th:text="'Price: '+${treatment.price}"></div>
+			<div class="col-2" th:text="'TotalSessions: '+${treatment.totalSessions}"></div>
+			<div class="col-2" th:text="'CompletedSessions: '+${treatment.completedSessions}"></div>
+			<div class="col-2" th:text="'FullyPaid: '+${treatment.fullyPaid}"></div>
+		</div>
+		
+		<a class="btn btn-primary mb-2" th:href="@{'/patients/view/'+${treatment.patient.id}}">Patient Details</a>
+		<a class="btn btn-primary mb-2" onclick="history.go(-1)">Back</a>
+		
+		<form th:action="@{/payments/edit_payment}" th:method="post" th:object="${payment}" >
+			<div class="table">
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Payment ID</label>
+					</div>
+					<div class="col-4 text-start">
+						<span th:text="${payment.id}">
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Total Payment Done</label>
+					</div>
+					<div class="col-4 text-start">
+						<span th:text="${totalPaymentDone}">
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Pending Amount</label>
+					</div>
+					<div class="col-4 text-start">
+						<span th:text="${pendingAmount}">
+					</div>
+					<input type="hidden" id="pendingAmount" th:value="${pendingAmount}"/>
+					<input type="hidden" id="price" th:value="${treatment.price}"/>
+					<input type="hidden" id="totalPaymentDone" th:value="${totalPaymentDone}"/>
+					<input type="hidden" id="originalPaymentAmount" th:value="*{paymentAmount}"/>
+					<input type="hidden" th:field="*{treatment}"/>
+					<input type="hidden" th:field="*{id}"/>
+					<input type="hidden" th:field="*{paymentDate}"/>
+				</div>
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Amount Paid</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control" type="number" th:field="*{paymentAmount}" id="paymentAmount">
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col-2">
+						<label>Payment Method</label>
+					</div>
+					<div class="col-4">
+						<select class="form-control" th:field="*{paymentMethod}" id="paymentMethod">
+							<option th:value="Cash">Cash</option>
+							<option th:value="PAYTM">PAYTM</option>
+							<option th:value="GooglePay">GooglePay</option>
+							<option th:value="PhonePe">PhonePe</option>
+							<option th:value="UPI">UPI</option>
+							<option th:value="OnlineBankTransfer">Online Bank Transfer</option>
+							<option th:value="CreditCard">POS Credit Card</option>
+							<option th:value="DebitCard">POS Dedit Card</option>
+							<option th:value="Others">Others</option>
+						</select>
+					</div>
+					
+				</div>
+			</div>
+			<div class="row mb-5">
+				<div class="col-6">
+					<button type="submit" class="btn btn-secondary btn-lg" onclick="formCheckBeforeSubmit()">Submit</button>
+				</div>
+			</div>
+		</form>
+		
+		
+	</div>
+</body>
+</html>

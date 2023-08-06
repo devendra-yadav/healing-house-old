@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="ISO-8859-1">
+	<title th:text="#{healing.house.title}"></title>
+	<link rel="stylesheet" th:href="@{/cssandjs/bootstrap.min.css}"></link>
+	<script type="text/javascript" th:src="@{/cssandjs/bootstrap.bundle.min.js}"></script>
+</head>
+<body>
+	<div th:insert="~{/fragments/header :: header}"></div>
+	<div class="container text-center">
+		<a th:href="@{'/patients/edit/'+${treatment.patient.id}}">
+				<img th:src="@{/images/edit.jpg}" width="30" height="30" th:alt="edit">
+		</a>
+		<h2 th:text="${treatment.patient.name}"></h2>
+		
+		<h6>Patient ID : <span th:text="${treatment.patient.id}"/></h6>
+		<span th:text="${treatment.patient.addressLine1}+' '+${treatment.patient.addressLine2}+' '+${treatment.patient.city}+' '+${treatment.patient.state}+' '+${treatment.patient.country}"/>
+		<div class="row alert alert-secondary mt-2 text-center">
+			<div class="col-2" th:text="'BirthDate: '+${treatment.patient.dateOfBirth != null? #temporals.format(treatment.patient.dateOfBirth,'dd-MMM-yyyy'):''}"></div>
+			<div class="col-2" th:text="'Mobile: '+${treatment.patient.mobile}"></div>
+			<div class="col-3" th:text="'Email: '+${treatment.patient.email}"></div>
+			<div class="col-3" th:text="'FoundUsBy: '+${treatment.patient.howDidYouFindUs}"></div>
+			<div class="col-2" th:text="'RegistrationDate: '+${#temporals.format(treatment.patient.firstVisitDate,'dd-MMM-yyyy HH:mm')}"></div>
+		</div>
+		<hr/>
+		
+		<h5>Session <span th:text="${treatment.completedSessions + 1}"/> of <span th:text="${treatment.totalSessions}"/> For Treatment '<span th:text="${treatment.pkg.name}"/>'</h5>
+		
+		<div class="row alert alert-light mt-2 text-center">
+			<div class="col-2" th:text="'TreatmentID: '+${treatment.id}"></div>
+			<div class="col-2" th:text="'StartDate: '+${#temporals.format(treatment.startDate,'dd-MMM-yyyy HH:mm')}"></div>
+			<div class="col-2" th:text="'Price: '+${treatment.price}"></div>
+			<div class="col-2" th:text="'TotalSessions: '+${treatment.totalSessions}"></div>
+			<div class="col-2" th:text="'CompletedSessions: '+${treatment.completedSessions}"></div>
+			<div class="col-2" th:text="'FullyPaid: '+${treatment.fullyPaid}"></div>
+		</div>
+		
+		<form th:action="@{/sessions/saveSession}" th:method="post" th:object="${sessionDto}">
+			<div class="table">
+				<div class="row justify-content-center">
+					<div class="col-4">
+						<label>LEFT PULSE</label>
+						<div class="row justify-content-center">
+							<div class="col-1">
+								<label>1.</label>
+							</div>
+							<div class="col-2">
+								<label>SI</label>
+							</div>
+							<div class="col-4">
+								<input class="form-control" th:field="*{leftPulseSI}" />
+							</div>
+						</div>
+						
+						<div class="row justify-content-center">
+							<div class="col-1">
+								<label></label>
+							</div>
+							<div class="col-2">
+								<label>HT</label>
+							</div>
+							<div class="col-4">
+								<input class="form-control" th:field="*{leftPulseHT}" />
+							</div>
+						</div>
+						
+						
+						<div class="row justify-content-center">
+							<div class="col-1">
+								<label>2.</label>
+							</div>
+							<div class="col-2">
+								<label>GB</label>
+							</div>
+							<div class="col-4">
+								<input class="form-control" th:field="*{leftPulseGB}" />
+							</div>
+						</div>
+						
+						<div class="row justify-content-center">
+							<div class="col-1">
+								<label></label>
+							</div>
+							<div class="col-2">
+								<label>LIV</label>
+							</div>
+							<div class="col-4">
+								<input class="form-control" th:field="*{leftPulseLIV}" />
+							</div>
+						</div>
+						
+						
+						<div class="row justify-content-center">
+							<div class="col-1">
+								<label>3.</label>
+							</div>
+							<div class="col-2">
+								<label>UB</label>
+							</div>
+							<div class="col-4">
+								<input class="form-control" th:field="*{leftPulseUB}" />
+							</div>
+						</div>
+						
+						<div class="row justify-content-center">
+							<div class="col-1">
+								<label></label>
+							</div>
+							<div class="col-2">
+								<label>KDL</label>
+							</div>
+							<div class="col-4">
+								<input class="form-control" th:field="*{leftPulseKDL}" />
+							</div>
+						</div>
+						
+					</div>
+					
+					<div class="col-4">
+						<label>RIGHT PULSE</label>
+						<div class="row justify-content-center">
+							<div class="col-1">
+								<label>1.</label>
+							</div>
+							<div class="col-2">
+								<label>LI</label>
+							</div>
+							<div class="col-4">
+								<input class="form-control" th:field="*{rightPulseLI}" />
+							</div>
+						</div>
+						
+						<div class="row justify-content-center">
+							<div class="col-1">
+								<label></label>
+							</div>
+							<div class="col-2">
+								<label>LU</label>
+							</div>
+							<div class="col-4">
+								<input class="form-control" th:field="*{rightPulseLU}" />
+							</div>
+						</div>
+						
+						
+						<div class="row justify-content-center">
+							<div class="col-1">
+								<label>2.</label>
+							</div>
+							<div class="col-2">
+								<label>ST</label>
+							</div>
+							<div class="col-4">
+								<input class="form-control" th:field="*{rightPulseST}" />
+							</div>
+						</div>
+						
+						<div class="row justify-content-center">
+							<div class="col-1">
+								<label></label>
+							</div>
+							<div class="col-2">
+								<label>SP</label>
+							</div>
+							<div class="col-4">
+								<input class="form-control" th:field="*{rightPulseSP}" />
+							</div>
+						</div>
+						
+						
+						<div class="row justify-content-center">
+							<div class="col-1">
+								<label>3.</label>
+							</div>
+							<div class="col-2">
+								<label>TW KDR</label>
+							</div>
+							<div class="col-4">
+								<input class="form-control" th:field="*{rightPulseTW_KDR}" />
+							</div>
+						</div>
+						
+						<div class="row justify-content-center">
+							<div class="col-1">
+								<label></label>
+							</div>
+							<div class="col-2">
+								<label>PC</label>
+							</div>
+							<div class="col-4">
+								<input class="form-control" th:field="*{rightPulsePC}" />
+							</div>
+						</div>
+						
+					</div>
+					
+				</div>
+			</div>
+		</form>
+		
+		
+	</div>
+</body>
+</html>
