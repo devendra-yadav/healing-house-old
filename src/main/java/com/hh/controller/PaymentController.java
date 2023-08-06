@@ -16,22 +16,24 @@ import com.hh.entity.Payment;
 import com.hh.entity.Treatment;
 import com.hh.repository.PaymentRepository;
 import com.hh.repository.TreatmentRepository;
+import com.hh.service.PaymentService;
+import com.hh.service.TreatmentService;
 
 @Controller
 @RequestMapping("/payments")
 public class PaymentController {
 	
 	@Autowired
-	private TreatmentRepository treatmentRepository;
+	private TreatmentService treatmentService;
 	
 	@Autowired
-	private PaymentRepository paymentRepository;
+	private PaymentService paymentService;
 
 	Logger logger = LoggerFactory.getLogger(PaymentController.class);
 	
 	@GetMapping("/treatment/{treatment_id}")
 	public String viewPaymentsForTreatment(@PathVariable("treatment_id") Integer treatmentId, Model model) {
-		Treatment treatment = treatmentRepository.findById(treatmentId).get();
+		Treatment treatment = treatmentService.getTreatmentById(treatmentId);
 		logger.info("fetched treatment for id +"+treatmentId+" : "+treatment);
 		
 		int totalPaymentDone = treatment.getPayments().stream().map((payment->payment.getPaymentAmount())).reduce(0, (a,b)->a+b);
@@ -46,7 +48,7 @@ public class PaymentController {
 	
 	@GetMapping("/treatment/{treatment_id}/payment_form")
 	public String treatmentPaymentForm(@PathVariable("treatment_id") Integer treatmentId, Model model) {
-		Treatment treatment = treatmentRepository.findById(treatmentId).get();
+		Treatment treatment = treatmentService.getTreatmentById(treatmentId);
 		logger.info("fetched treatment for id +"+treatmentId+" : "+treatment);
 		
 		int totalPaymentDone = treatment.getPayments().stream().map((payment->payment.getPaymentAmount())).reduce(0, (a,b)->a+b);
@@ -67,9 +69,9 @@ public class PaymentController {
 	public String makePayment(@PathVariable("treatment_id") Integer treatmentId, @ModelAttribute("paymentDto") PaymentDTO paymentDto, Model model) {
 		logger.info("Request came to make payment for treatment id "+treatmentId+". "+paymentDto);
 		
-		Treatment treatment = treatmentRepository.findById(treatmentId).get();
-		Payment payment = new Payment(treatment, paymentDto.getPaymentAmount(), paymentDto.getPaymentMethod(), paymentDto.getPaymentDate());
-		paymentRepository.save(payment);
+		Treatment treatment = treatmentService.getTreatmentById(treatmentId);
+				
+		paymentService.savePayment(treatment, paymentDto);
 		
 		//Check if all payments done.
 		int totalPaymentDone = treatment.getPayments().stream().map((pymt)->pymt.getPaymentAmount()).reduce(0, (a,b)->a+b);
@@ -77,11 +79,11 @@ public class PaymentController {
 		
 		if(totalPaymentDone == totalTreatmentPrice) {
 			treatment.setFullyPaid(true);
-			treatmentRepository.save(treatment);
+			treatmentService.saveTreatment(treatment);
 			logger.info("Full payment done for teatment : "+treatment);
 		}else if(totalPaymentDone < totalTreatmentPrice && treatment.isFullyPaid() == true){
 			treatment.setFullyPaid(false);
-			treatmentRepository.save(treatment);
+			treatmentService.saveTreatment(treatment);
 			logger.info("Full payment status changed to 'NOT FULLY PAID' for teatment : "+treatment);
 		}
 		
@@ -90,7 +92,7 @@ public class PaymentController {
 	
 	@GetMapping("/delete/{payment_id}")
 	public String deletePayment(@PathVariable("payment_id") Integer paymentId, Model model) {
-		Payment payment = paymentRepository.findById(paymentId).get();
+		Payment payment = paymentService.getPaymentById(paymentId);
 		
 		//Check if all payments done.
 		int totalPaymentDone = payment.getTreatment().getPayments().stream().map((pymt)->pymt.getPaymentAmount()).reduce(0, (a,b)->a+b);
@@ -99,11 +101,11 @@ public class PaymentController {
 		if((totalPaymentDone - payment.getPaymentAmount()) < totalTreatmentPrice && payment.getTreatment().isFullyPaid() == true) {
 			Treatment treatment = payment.getTreatment();
 			treatment.setFullyPaid(false);
-			treatmentRepository.save(treatment);
+			treatmentService.saveTreatment(treatment);
 			logger.info("Full payment status changed from 'DONE' to 'NOT DONE' for teatment : "+treatment);
 		}
 		
-		paymentRepository.deleteById(paymentId);
+		paymentService.deletePaymentById(paymentId);
 		logger.info("deleted payment : "+payment);
 		
 		return "redirect:/payments/treatment/"+payment.getTreatment().getId();
@@ -112,7 +114,7 @@ public class PaymentController {
 	@GetMapping("/edit_payment_form/{payment_id}")
 	public String editPaymentForm(@PathVariable("payment_id") Integer paymentId, Model model) {
 		
-		Payment payment = paymentRepository.findById(paymentId).get();
+		Payment payment = paymentService.getPaymentById(paymentId);
 		
 		logger.info("Request came to edit payment : "+payment);
 		int totalPaymentDone = payment.getTreatment().getPayments().stream().map((pymt->pymt.getPaymentAmount())).reduce(0, (a,b)->a+b);
@@ -131,7 +133,7 @@ public class PaymentController {
 	@PostMapping("/edit_payment")
 	public String editPayment(@ModelAttribute("payment") Payment payment, Model model) {
 		logger.info("Edited payment : "+payment);
-		paymentRepository.save(payment);
+		paymentService.savePayment(payment);
 		
 		int totalTreatmentPrice = payment.getTreatment().getPrice();
 		int totalPaymentDone = payment.getTreatment().getPayments().stream().map((pymt->pymt.getPaymentAmount())).reduce(0, (a,b)->a+b);
@@ -139,7 +141,7 @@ public class PaymentController {
 		if(totalPaymentDone < totalTreatmentPrice && payment.getTreatment().isFullyPaid() == true) {
 			Treatment treatment = payment.getTreatment();
 			treatment.setFullyPaid(false);
-			treatmentRepository.save(treatment);
+			treatmentService.saveTreatment(treatment);
 			logger.info("Full payment status changed from 'DONE' to 'NOT DONE' for teatment : "+treatment);
 		}
 		

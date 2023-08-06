@@ -22,6 +22,8 @@ import com.hh.entity.Patient;
 import com.hh.entity.Treatment;
 import com.hh.repository.PatientRepository;
 import com.hh.repository.TreatmentRepository;
+import com.hh.service.PatientService;
+import com.hh.service.TreatmentService;
 
 import jakarta.validation.Valid;
 
@@ -32,10 +34,10 @@ public class PatientsController {
 	private Logger logger = LoggerFactory.getLogger(PatientsController.class);
 	
 	@Autowired
-	private PatientRepository patientRepository;
+	private PatientService patientService;
 	
 	@Autowired
-	private TreatmentRepository treatmentRepository;
+	private TreatmentService treatmentService;
 	
 	@GetMapping("/")
 	public String patients() {
@@ -58,33 +60,24 @@ public class PatientsController {
 			return "patients/add_patient_form";
 		}
 		
-		if(patientDto.getHowDidYouFindUs().equals(",")) {
-			patientDto.setHowDidYouFindUs("");
-		}
-		//Remove extra comma from the end
-		if(patientDto.getHowDidYouFindUs().endsWith(",")) {
-			int lengthOfHowDidYouFindUs=patientDto.getHowDidYouFindUs().length();
-			patientDto.setHowDidYouFindUs(patientDto.getHowDidYouFindUs().substring(0, lengthOfHowDidYouFindUs-1));
-		}
+		Patient patient = patientService.savePatient(patientDto);
 		
-		Patient patient = new Patient(patientDto);
-		patient = patientRepository.save(patient);
 		logger.info("Saved New Patient. Patient ID : "+patient.getId());
 		return "redirect:/patients/view_patients?recentlyAddedPatientId="+patient.getId();
 	}
 	
 	@GetMapping("/view_patients")
 	public String viewPatients(@RequestParam(name = "recentlyAddedPatientId", required=false) Integer recentlyAddedPatientId , @RequestParam(name = "recentlyEditedPatientId", required=false) Integer recentlyEditedPatientId, @RequestParam(name = "recentlyDeletedPatientId", required=false) Integer recentlyDeletedPatientId, @RequestParam(name = "recentlyDeletedPatientName", required=false) String recentlyDeletedPatientName, Model model) {
-		List<Patient> allPatients = patientRepository.findAll();
+		List<Patient> allPatients = patientService.getAllPatients();
 		model.addAttribute("allPatients", allPatients);
-		logger.info("recentlyEditedPatientId : "+recentlyEditedPatientId+" --> recentlyAddedPatientId : "+recentlyAddedPatientId);
+		logger.info("recentlyEditedPatientId : "+recentlyEditedPatientId+" --> recentlyAddedPatientId : "+recentlyAddedPatientId+" --> recentlyDeletedPatientId : "+recentlyDeletedPatientId);
 		if(recentlyAddedPatientId!=null) {
-			Patient recentlyAddedPatient = patientRepository.findById(recentlyAddedPatientId).get();
+			Patient recentlyAddedPatient = patientService.getPatientById(recentlyAddedPatientId);
 			model.addAttribute("recentlyAddedPatient", recentlyAddedPatient);
 			logger.info("Recently added patient model var set "+recentlyAddedPatient);
 		}
 		if(recentlyEditedPatientId!=null) {
-			Patient recentlyEditedPatient = patientRepository.findById(recentlyEditedPatientId).get();
+			Patient recentlyEditedPatient = patientService.getPatientById(recentlyEditedPatientId);
 			model.addAttribute("recentlyEditedPatient", recentlyEditedPatient);
 			logger.info("Recently edited patient model var set "+recentlyEditedPatient);
 		}
@@ -100,13 +93,13 @@ public class PatientsController {
 	@GetMapping("/view/{patient_id}")
 	public String getPatientById(@PathVariable("patient_id") Integer patientId, Model model) {
 		logger.info("Fetching patient id "+patientId);
-		Patient patient = patientRepository.findById(patientId).get();
+		Patient patient = patientService.getPatientById(patientId);
 		logger.info("Patient fetched : "+patient);
 		model.addAttribute("patient", patient);
 		
 		logger.info("Fetching treatment records for patient id : "+patientId);
 		
-		List<Treatment> allTreatments = treatmentRepository.findByPatient(patient);
+		List<Treatment> allTreatments = treatmentService.getAllTreatmentsForPatient(patient);
 		
 		//Create a map of treatmentId and corresponding total payment done.
 		Map<Integer, Integer> treatmentPaymentMap = new HashMap<>();
@@ -126,9 +119,9 @@ public class PatientsController {
 	
 	@GetMapping("/delete/{patient_id}")
 	public String deletePackage(@PathVariable("patient_id") Integer patientId,  Model model) {
-		Patient patient = patientRepository.findById(patientId).get();
+		Patient patient = patientService.getPatientById(patientId);
 		if(patient!=null) {
-			patientRepository.delete(patient);
+			patientService.deletePatient(patient);
 			logger.info("Patient '"+patient.getName()+"' deleted.");
 		}else {
 			logger.warn("Invalid patient id "+patientId+". Cant delete!");
@@ -138,7 +131,7 @@ public class PatientsController {
 	
 	@GetMapping("/edit/{patient_id}")
 	public String editPatientForm(@PathVariable("patient_id") Integer patientId, Model model) {
-		Patient patient = patientRepository.findById(patientId).get();
+		Patient patient = patientService.getPatientById(patientId);
 		model.addAttribute("patient", patient);
 		return "patients/edit_patient_form";
 	}
@@ -151,24 +144,8 @@ public class PatientsController {
 			return "patients/edit_patient_form";
 		}
 		
-		//This will happen when someone didnt choose any option. So instead of save ",", we save blank
-		if(patient.getHowDidYouFindUs().equals(",")) {
-			patient.setHowDidYouFindUs("");
-		}
+		patient = patientService.savePatient(patient);
 		
-		//Remove extra comma from the end
-		while(patient.getHowDidYouFindUs().endsWith(",")) {
-			int lengthOfHowDidYouFindUs=patient.getHowDidYouFindUs().length();
-			patient.setHowDidYouFindUs(patient.getHowDidYouFindUs().substring(0, lengthOfHowDidYouFindUs-1));
-		}
-		
-		//Remove extra comma from the beginning
-		while(patient.getHowDidYouFindUs().startsWith(",")) {
-			int lengthOfHowDidYouFindUs=patient.getHowDidYouFindUs().length();
-			patient.setHowDidYouFindUs(patient.getHowDidYouFindUs().substring(1, lengthOfHowDidYouFindUs));
-		}
-		
-		patientRepository.save(patient);
 		logger.info("Patient Saved with patient id "+patient.getId());
 		return "redirect:/patients/view_patients?recentlyEditedPatientId="+patient.getId();
 	}

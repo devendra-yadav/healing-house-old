@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.hh.dto.PackageDTO;
 import com.hh.entity.Package;
 import com.hh.repository.PackageRepository;
+import com.hh.service.PackageService;
 
 import jakarta.validation.Valid;
 
@@ -25,7 +26,7 @@ import jakarta.validation.Valid;
 public class PackageController {
 	
 	@Autowired
-	private PackageRepository packageRepository;
+	private PackageService packageService;
 	
 	private Logger logger = LoggerFactory.getLogger(PackageController.class);
 	
@@ -47,9 +48,7 @@ public class PackageController {
 			logger.warn("Added package have invalid input values. "+bindingResult);
 			return "packages/add_package_form";
 		}
-		Package pkg = new Package(packageDto);
-		
-		pkg = packageRepository.save(pkg);
+		Package pkg = packageService.savePackage(packageDto);
 		logger.info("Package Saved with package id "+pkg.getId());
 		
 		return "redirect:/packages/view_packages";
@@ -57,7 +56,8 @@ public class PackageController {
 	
 	@GetMapping("/view_packages")
 	public String viewPackages(Model model) {
-		List<Package> allPackages = packageRepository.findAll();
+		logger.info("Getting all packages from database");
+		List<Package> allPackages = packageService.getAllPackages();
 		model.addAttribute("allPackages", allPackages);
 		
 		return "packages/all_packages";
@@ -65,7 +65,7 @@ public class PackageController {
 	
 	@GetMapping("/edit/{package_id}")
 	public String editPackageForm(@PathVariable("package_id") Integer packageId,  Model model) {
-		Package pkg = packageRepository.findById(packageId).get();
+		Package pkg = packageService.getPackageById(packageId);
 		model.addAttribute("package", pkg);
 		return "packages/edit_package_form";
 	}
@@ -78,7 +78,7 @@ public class PackageController {
 			return "packages/edit_package_form";
 		}
 				
-		pkg = packageRepository.save(pkg);
+		pkg = packageService.savePackage(pkg);
 		logger.info("Package Saved with package id "+pkg.getId());
 		
 		return "redirect:/packages/view_packages";
@@ -86,9 +86,9 @@ public class PackageController {
 	
 	@GetMapping("/delete/{package_id}")
 	public String deletePackage(@PathVariable("package_id") Integer packageId,  Model model) {
-		Package pkg = packageRepository.findById(packageId).get();
+		Package pkg = packageService.getPackageById(packageId);
 		if(pkg!=null) {
-			packageRepository.delete(pkg);
+			packageService.deletePackageById(packageId);
 			logger.info("Package '"+pkg.getName()+"' deleted.");
 		}else {
 			logger.warn("Invalid package id "+packageId+". Cant delete!");

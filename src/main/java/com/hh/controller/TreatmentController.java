@@ -24,6 +24,10 @@ import com.hh.repository.PackageRepository;
 import com.hh.repository.PatientRepository;
 import com.hh.repository.PaymentRepository;
 import com.hh.repository.TreatmentRepository;
+import com.hh.service.PackageService;
+import com.hh.service.PatientService;
+import com.hh.service.PaymentService;
+import com.hh.service.TreatmentService;
 
 import jakarta.transaction.Transactional;
 
@@ -32,26 +36,26 @@ import jakarta.transaction.Transactional;
 public class TreatmentController {
 	
 	@Autowired
-	private TreatmentRepository treatmentRepository;
+	private TreatmentService treatmentService;
 	
 	@Autowired
-	private PackageRepository packageRepository;
+	private PackageService packageService;
 	
 	@Autowired
-	private PatientRepository patientRepository;
+	private PatientService patientService;
 	
 	@Autowired
-	private PaymentRepository paymentRepository;
+	private PaymentService paymentService;
 	
 	private Logger logger = LoggerFactory.getLogger(TreatmentController.class);
 	
 	@GetMapping("/select_treatment_form/{patient_id}")
 	public String selectTreatmentForm(@PathVariable("patient_id") Integer patientId, Model model) {
 		
-		Patient patient = patientRepository.findById(patientId).get();
+		Patient patient = patientService.getPatientById(patientId);
 		
 		logger.info("Request came to select treatment for patient "+patient);
-		List<Package> allPackages = packageRepository.findAll();
+		List<Package> allPackages = packageService.getAllPackages();
 		TreatmentDTO treatmentDto = new TreatmentDTO();
 		treatmentDto.setPatientId(patientId);
 		
@@ -72,14 +76,14 @@ public class TreatmentController {
 	@PostMapping("/select_treatment")
 	public String selectTreatment(@ModelAttribute("treatment") TreatmentDTO treatmentDto, Model model) {
 		logger.info("treatment selected "+treatmentDto);
-		Patient patient = patientRepository.findById(treatmentDto.getPatientId()).get();
-		Package pkg = packageRepository.findById(treatmentDto.getPackageId()).get();
+		Patient patient = patientService.getPatientById(treatmentDto.getPatientId());
+		Package pkg = packageService.getPackageById(treatmentDto.getPackageId());
 		
 		Treatment treatment = new Treatment(treatmentDto, patient, pkg);
-		treatment = treatmentRepository.save(treatment);
+		treatment = treatmentService.saveTreatment(treatment);
 		
 		Payment payment = new Payment(treatment, treatmentDto.getAmountPaid(), treatmentDto.getPaymentMethod(), treatment.getStartDate());
-		paymentRepository.save(payment);		
+		paymentService.savePayment(payment);		
 		logger.info("Treatment saved "+treatment);
 		
 		return "redirect:/patients/view/"+treatmentDto.getPatientId();
@@ -87,9 +91,8 @@ public class TreatmentController {
 	
 	@GetMapping("/get_treatment/{treatment_id}")
 	public String getTreatment(@PathVariable("treatment_id") Integer treatmentId, Model model ) {
-		Treatment treatment = treatmentRepository.findById(treatmentId).get();
+		Treatment treatment = treatmentService.getTreatmentById(treatmentId);
 		logger.info("Treatment Details : "+treatment);
-		
 		
 		return "/home";
 	}
@@ -98,28 +101,24 @@ public class TreatmentController {
 	@GetMapping("/delete/{patientId}/{treatmentId}")
 	@Transactional
 	public String deleteTreatment(@PathVariable("patientId") Integer patientId, @PathVariable("treatmentId") Integer treatmentId, Model model) {
-		Patient patient = patientRepository.findById(patientId).get();
+		Patient patient = patientService.getPatientById(patientId);
 		logger.info("Request came to delete treatment id "+treatmentId+" for patient : "+patient);
 		
-		Treatment treatment = treatmentRepository.findById(treatmentId).get();
-		Long paymentRecordsDeleted = paymentRepository.removeByTreatment(treatment);
+		Treatment treatment = treatmentService.getTreatmentById(treatmentId);
+		Long paymentRecordsDeleted = paymentService.deletePaymentByTreatment(treatment);
 		logger.info("Total of "+paymentRecordsDeleted+" payment records deleted for treatment :"+treatment);
-		treatmentRepository.deleteById(treatmentId);
+		treatmentService.deleteTreatmentById(treatmentId);
 		logger.info("deleted treatment id "+treatmentId+" for patient : "+patient);
 		
-		//List<Treatment> allTreatments = treatmentRepository.findByPatient(patient);
-		//model.addAttribute("allTreatments", allTreatments);
-		//model.addAttribute("patient", patient);		
-		//return "/patients/patient_details";
 		return "redirect:/patients/view/"+patient.getId();
 	}
 	
 	@GetMapping("/edit/{patientId}/{treatmentId}")
 	public String editTreatmentForm(@PathVariable("patientId") Integer patientId, @PathVariable("treatmentId") Integer treatmentId, Model model) {
-		Patient patient = patientRepository.findById(patientId).get();
-		Treatment treatment = treatmentRepository.findById(treatmentId).get();
+		Patient patient = patientService.getPatientById(patientId);
+		Treatment treatment = treatmentService.getTreatmentById(treatmentId);
 		logger.info("Request came to edit treatment "+treatment+" for patient : "+patient);
-		List<Package> allPackages = packageRepository.findAll();
+		List<Package> allPackages = packageService.getAllPackages();
 		
 		int totalAmountPaid = treatment.getPayments().stream().map((pymt)->pymt.getPaymentAmount()).reduce(0, (a,b)->a+b);
 		
@@ -134,7 +133,7 @@ public class TreatmentController {
 	@PostMapping("/edit_treatment")
 	public String editTreatment(@ModelAttribute("treatment") Treatment treatment, Model model) {
 		logger.info("request to update treatment. updated treatment "+treatment);
-		treatment = treatmentRepository.save(treatment);
+		treatment = treatmentService.saveTreatment(treatment);
 		logger.info("Treatment updated "+treatment);
 		
 		
