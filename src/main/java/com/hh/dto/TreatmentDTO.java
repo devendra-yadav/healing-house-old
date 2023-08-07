@@ -12,9 +12,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TreatmentDTO {
 
+	private String name;
 	private Integer patientId;
 	private Integer packageId;
-	private LocalDateTime date;
+	private LocalDateTime startDate;
 	private Integer price;
 	private Integer amountPaid;
 	private String paymentMethod;
@@ -22,6 +23,20 @@ public class TreatmentDTO {
 	private int totalSessions;
 	private int completedSessions;
 	private boolean fullyPaid;
+	
+	
+	//Initial Enquiry
+	private String complexion;
+	private String eyes;
+	private String stateOfMind;
+	
+	private String leftCheekLiver;
+	private String chinKidney;
+	private String nodeSpleen;
+	private String rightCheekLung;
+	
+	private String darkSpots;
+	
 	
 	
 }
