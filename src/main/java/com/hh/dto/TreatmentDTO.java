@@ -16,6 +16,7 @@ public class TreatmentDTO {
 	private Integer patientId;
 	private Integer packageId;
 	private LocalDateTime startDate;
+	private LocalDateTime endDate;
 	private Integer price;
 	private Integer amountPaid;
 	private String paymentMethod;

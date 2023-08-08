@@ -97,14 +97,17 @@
 						</select>
 					</div>
 					
+				</div>
+				<div class="row mb-3">
 					<div class="col-2">
 						<label>Total Sessions</label>
 					</div>
 					<div class="col-4">
 						<input class="form-control" type="number" th:field="*{totalSessions}" id="totalSessions">
 					</div>
-					
-					
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('totalSessions')}" th:errors="*{totalSessions}" th:errorClass="error" />
+					</div>
 				</div>
 				
 				<div class="row mb-3">
@@ -114,17 +117,22 @@
 					<div class="col-4">
 						<input class="form-control" type="number" th:field="*{price}" id="price">
 					</div>
-					
-					
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" th:errorClass="error" />
+					</div>
+				</div>
+				
+				<div class="row mb-3">
 					<div class="col-2">
 						<label>Amount Paid</label>
 					</div>
 					<div class="col-4">
 						<input class="form-control" type="number" th:field="*{amountPaid}" id="amountPaid" th:onchange="checkFullyPaid()">
 					</div>
-					
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('amountPaid')}" th:errors="*{amountPaid}" th:errorClass="error" />
+					</div>
 				</div>
-				
 				
 				<div class="row mb-3">
 					<div class="col-2">
@@ -144,8 +152,12 @@
 							<option th:value="Others">Others</option>
 						</select>
 					</div>
-					
-					
+					<div class="col-3">
+						<div th:if="${#fields.hasErrors('paymentMethod')}" th:errors="*{paymentMethod}" th:errorClass="error" />
+					</div>
+				</div>
+				
+				<div class="row mb-3">
 					<div class="col-2">
 						<label>Fully Paid</label>
 					</div>
@@ -155,10 +167,10 @@
 					
 				</div>
 				
+				
+				
 				<input type="hidden" th:field="*{patientId}" th:value="${patient}">
 			</div>
-			
-			
 			<div class="row mb-5">
 				<div class="col-6">
 					<button type="submit" class="btn btn-secondary btn-lg" onclick="formCheckBeforeSubmit()">Submit</button>
