@@ -43,10 +43,7 @@
 			var amountPaid=parseInt(document.getElementById('amountPaid').value,10);
 			var paymentMethod=document.getElementById('paymentMethod').value;
 			
-			if(pkg==""){
-				alert('Please choose a package');
-				event.preventDefault();
-			}else if(amountPaid > price){
+			if(amountPaid > price){
 				alert('Amount Paid cant be more than Price');
 				event.preventDefault();
 			}else if(!(amountPaid >=0) ){ //this is to check NaN as NaN is never >= 0
