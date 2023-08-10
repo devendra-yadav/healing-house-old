@@ -84,8 +84,8 @@
 		<h4 class="mb-3">New Treatment</h4>
 		
 		<form th:action="@{/treatment/select_treatment}" th:object="${treatment}" th:method="post">
-			<div class="table">
-				<div class="row mb-3">
+			<div class="table border border-3 rounded">
+				<div class="row mb-3 mt-2 me-2">
 					<div class="col-2">
 						<label>Package</label>
 					</div>
@@ -107,7 +107,7 @@
 					
 				</div>
 				
-				<div class="row mb-3">
+				<div class="row mb-3 me-2">
 					<div class="col-2">
 						<label>Price</label>
 					</div>
@@ -126,7 +126,7 @@
 				</div>
 				
 				
-				<div class="row mb-3">
+				<div class="row mb-3 me-2">
 					<div class="col-2">
 						<label>Payment Method</label>
 					</div>
@@ -217,25 +217,32 @@
 					<input type="checkbox" class="form-control form-check-input" th:field="*{movementAndTranquility}">
 				</div>
 				
-				<div class="col-2">
+				<div class="col-1">
 					<label>Cough And Panting</label>
 				</div>
 				<div class="col-1">
 					<input type="checkbox" class="form-control form-check-input" th:field="*{coughAndPanting}">
 				</div>
 				
-				<div class="col-2">
+				<div class="col-1">
 					<label>Convulsive Spasm</label>
 				</div>
 				<div class="col-1">
 					<input type="checkbox" class="form-control form-check-input" th:field="*{convulsiveSpasm}">
 				</div>
 				
-				<div class="col-2">
+				<div class="col-1">
 					<label>Paralysis</label>
 				</div>
 				<div class="col-1">
 					<input type="checkbox" class="form-control form-check-input" th:field="*{paralysis}">
+				</div>
+				
+				<div class="col-2">
+					<label>Violent Movements For Limbs</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{violentMovementsForLimbs}">
 				</div>
 			</div>
 			
@@ -248,38 +255,28 @@
 					<input type="checkbox" class="form-control form-check-input" th:field="*{chestAbdomenPattern}">
 				</div>
 				
-				<div class="col-2">
+				<div class="col-1">
 					<label>Delirious</label>
 				</div>
 				<div class="col-1">
 					<input type="checkbox" class="form-control form-check-input" th:field="*{delirious}">
 				</div>
 				
-				<div class="col-2">
+				<div class="col-1">
 					<label>Overweight</label>
 				</div>
 				<div class="col-1">
 					<input type="checkbox" class="form-control form-check-input" th:field="*{overweight}">
 				</div>
 				
-				<div class="col-2">
+				<div class="col-1">
 					<label>Skinny</label>
 				</div>
 				<div class="col-1">
 					<input type="checkbox" class="form-control form-check-input" th:field="*{skinny}">
 				</div>
-			</div>
-			
-			
-			<div class="row mb-3">
-				<div class="col-2">
-					<label>Violent Movements For Limbs</label>
-				</div>
-				<div class="col-1">
-					<input type="checkbox" class="form-control form-check-input" th:field="*{violentMovementsForLimbs}">
-				</div>
 				
-				<div class="col-2">
+				<div class="col-1">
 					<label>Face</label>
 				</div>
 				<div class="col-1">
@@ -350,7 +347,7 @@
 				</div>
 				
 				<div class="col-2">
-					<label>panting</label>
+					<label>Panting</label>
 				</div>
 				<div class="col-1">
 					<input type="checkbox" class="form-control form-check-input" th:field="*{panting}">
@@ -358,7 +355,452 @@
 			</div>
 			
 			
+			<!-- ************ SMELLING ********* -->
+			<div class="row mt-4 mb-2">
+				<div class="col">
+					<b>Smelling</b>
+				</div>
+			</div>
 			
+			
+			<div class="row mb-3">
+				<div class="col-2">
+					<label>Breath Odor</label>
+				</div>
+				<div class="col-4">
+					<input type="text" class="form-control" th:field="*{breathOdor}">
+				</div>
+				
+				<div class="col-2">
+					<label>Sweat Odor</label>
+				</div>
+				<div class="col-4">
+					<input type="text" class="form-control" th:field="*{sweatOdor}">
+				</div>
+			</div>
+			
+			<div class="row mb-3">
+				<div class="col-2">
+					<label>Odor Under Armpit</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{odorUnderArmpit}">
+				</div>
+			</div>
+			
+			<!-- ************ FOOD AND APPETITE ********* -->
+			<div class="row mt-4 mb-2">
+				<div class="col">
+					<b>Food and Appetite</b>
+				</div>
+			</div>
+			
+			<div class="row mb-3">
+				<div class="col-2">
+					<label>Poor Appetite</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{poorAppetite}">
+				</div>
+				
+				<div class="col-2">
+					<label>Lack Of Appetite With Fullness Of Stomach</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{lackOfAppetiteWithFullnessOfStomach}">
+				</div>
+				
+				<div class="col-2">
+					<label>Hunger With No Desire To Eat</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{hungerWithNoDesireToEat}">
+				</div>
+				
+				<div class="col-2">
+					<label>Get Hungry Easily</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{getHungryEasily}">
+				</div>
+			</div>
+			
+			<div class="row mb-3">
+				<div class="col-2">
+					<label>Taste</label>
+				</div>
+				<div class="col-4">
+					<input type="text" class="form-control" th:field="*{taste}">
+				</div>
+			
+				<div class="col-2">
+					<label>Inability To Feel Taste</label>
+				</div>
+				<div class="col-4">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{inabilityToFeelTaste}">
+				</div>	
+			</div>
+			
+			
+			<!-- ************ FOOD AND APPETITE ********* -->
+			<div class="row mt-4 mb-2">
+				<div class="col">
+					<b>Chills and Fever</b>
+				</div>
+			</div>
+			
+			<div class="row mb-3">
+				<div class="col-2">
+					<label>Pattern Of Exterior Interior Or Both</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{patternOfExteriorInteriorOrBoth}">
+				</div>
+				
+				<div class="col-2">
+					<label>Alternate Chills Or Fever</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{alternateChillsOrFever}">
+				</div>
+				
+				<div class="col-2">
+					<label>Persistent High Fever</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{persistentHighFever}">
+				</div>
+				
+				<div class="col-2">
+					<label>Middle fever</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{middlefever}">
+				</div>
+			</div>
+			
+			<div class="row mb-3">
+				<div class="col-2">
+					<label>Tidal Fever</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{tidalFever}">
+				</div>
+				
+				<div class="col-2">
+					<label>Irritable Vexing Fever</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{irritableVexingFever}">
+				</div>
+			</div>
+			
+			
+			
+			<!-- ************ STOOL AND URINE ********* -->
+			<div class="row mt-4 mb-2">
+				<div class="col">
+					<b>Stool and Urine</b>
+				</div>
+			</div>
+			
+			<div class="row mb-3">
+				<div class="col-2">
+					<label>Stool Consistency</label>
+				</div>
+				<div class="col-4">
+					<input type="text" class="form-control" th:field="*{stoolConsistency}">
+				</div>
+				
+				<div class="col-2">
+					<label>Urine</label>
+				</div>
+				<div class="col-4">
+					<input type="text" class="form-control" th:field="*{urine}">
+				</div>
+			</div>
+			
+			<div class="row mb-3">
+				<div class="col-2">
+					<label>Flatulency</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{flatulency}">
+				</div>
+				
+				<div class="col-2">
+					<label>Prolapse Anus</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{prolapseAnus}">
+				</div>
+				
+				<div class="col-2">
+					<label>Hemorrhoids</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{hemorrhoids}">
+				</div>
+			</div>
+			
+			
+			
+			<!-- ************ SWEATING AND PERSPIRATION ********* -->
+			<div class="row mt-4 mb-2">
+				<div class="col">
+					<b>Sweating and Perspiration</b>
+				</div>
+			</div>
+			
+			<div class="row mb-3">
+				<div class="col-2">
+					<label>Spontaneous Sweating</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{spontaneousSweating}">
+				</div>
+				
+				<div class="col-2">
+					<label>Night Sweating</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{nightSweating}">
+				</div>
+				
+				<div class="col-2">
+					<label>Yellow Sweating Stain On Clothes</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{yellowSweatingStainOnClothes}">
+				</div>
+				
+				<div class="col-2">
+					<label>Expiring Sweating</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{expiringSweating}">
+				</div>
+			</div>
+			
+			
+			<!-- ************ INSOMNIA ********* -->
+			<div class="row mt-4 mb-2">
+				<div class="col">
+					<b>Insomnia</b>
+				</div>
+			</div>
+			
+			
+			<div class="row mb-3">
+				<div class="col-2">
+					<label>Difficult To Sleep</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{difficultToSleep}">
+				</div>
+				
+				<div class="col-2">
+					<label>Sleep But Keep Waking Up</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{sleepButKeepWakingUp}">
+				</div>
+				
+				<div class="col-2">
+					<label>Fear To Fall Asleep</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{fearToFallSleep}">
+				</div>
+				
+				<div class="col-2">
+					<label>Sleep Something PullBack</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{sleepSomethingPullBack}">
+				</div>
+			</div>
+			
+			<div class="row mb-3">
+				<div class="col-2">
+					<label>Sleep But Wakeup In Middle Of Night SameTime</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{sleepButWakeupInMiddleNightSameTime}">
+				</div>
+				
+				<div class="col-2">
+					<label>Too Many Thoughts Before Sleep</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{tooManyThoughtsBeforeSleep}">
+				</div>
+				
+				<div class="col-2">
+					<label>Too Much Dreams</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{tooMuchDreams}">
+				</div>
+				
+			</div>
+			
+			<div class="row mb-3">
+				<div class="col-2">
+					<label>Dreams About What</label>
+				</div>
+				<div class="col-10">
+					<input type="text" class="form-control" th:field="*{dreamsAboutWhat}">
+				</div>
+			</div>
+			
+			
+			<!-- ************ TINNITUS ********* -->
+			<div class="row mt-4 mb-2">
+				<div class="col">
+					<b>Tinnitus</b>
+				</div>
+			</div>
+			
+			
+			<div class="row mb-3">
+				<div class="col-2">
+					<label>Loud High Pitch</label>
+				</div>
+				<div class="col">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{loudHighPitch}">
+				</div>
+				
+				<div class="col-2">
+					<label>Low Pich Noise</label>
+				</div>
+				<div class="col">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{lowPichNoise}">
+				</div>
+				
+				<div class="col-2">
+					<label>Deafness Or Hearing Impairment</label>
+				</div>
+				<div class="col">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{deafnessOrHearingImpairment}">
+				</div>
+				
+				<div class="col-1">
+					<label>Red PainFull Eyes</label>
+				</div>
+				<div class="col">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{redPainFullEyes}">
+				</div>
+				
+				<div class="col-2">
+					<label>Blurry Cloudy Vision</label>
+				</div>
+				<div class="col">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{blurryCloudyVision}">
+				</div>
+			</div>
+			
+			
+			<!-- ************ MENSTURATION ********* -->
+			<div class="row mt-4 mb-2">
+				<div class="col">
+					<b>Mensturation</b>
+				</div>
+			</div>
+			
+			<div class="row mb-3">
+				<div class="col-2">
+					<label>Menstural Disorder</label>
+				</div>
+				<div class="col">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{mensturalDisorder}">
+				</div>
+				
+				<div class="col-2">
+					<label>Menstural Pain</label>
+				</div>
+				<div class="col">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{mensturalPain}">
+				</div>
+				
+				<div class="col-2">
+					<label>Dysmenorrhea</label>
+				</div>
+				<div class="col">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{dysmenorrhea}">
+				</div>
+				
+				<div class="col-1">
+					<label>Leucorrhea</label>
+				</div>
+				<div class="col">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{leucorrhea}">
+				</div>
+				
+				<div class="col-2">
+					<label>VaginalDischarge</label>
+				</div>
+				<div class="col">
+					<input type="checkbox" class="form-control form-check-input" th:field="*{vaginalDischarge}">
+				</div>
+			</div>
+			
+			
+			<div class="row mb-3">
+				<div class="col-2">
+					<label>Frequency</label>
+				</div>
+				<div class="col-4">
+					<input type="text" class="form-control" th:field="*{frequency}">
+				</div>
+				
+				<div class="col-2">
+					<label>Mens Blood Quantity</label>
+				</div>
+				<div class="col-4">
+					<input type="text" class="form-control" th:field="*{mensBloodQuantity}">
+				</div>
+			</div>
+			
+			<div class="row mb-3">
+				<div class="col-2">
+					<label>Mens Blood Color</label>
+				</div>
+				<div class="col-4">
+					<input type="text" class="form-control" th:field="*{mensBloodColor}">
+				</div>
+				
+				<div class="col-2">
+					<label>Mens Blood Smell</label>
+				</div>
+				<div class="col-4">
+					<input type="text" class="form-control" th:field="*{mensBloodSmell}">
+				</div>
+			</div>
+			
+			
+			<!-- ************ OTHERS ********* -->
+			<div class="row mt-4 mb-2">
+				<div class="col">
+					<b>Others</b>
+				</div>
+			</div>
+			
+			<div class="row mb-3">
+				<div class="col-2">
+					<label>Pain</label>
+				</div>
+				<div class="col-4">
+					<input type="text" class="form-control" th:field="*{pain}">
+				</div>
+				
+				<div class="col-2">
+					<label>Dizziness</label>
+				</div>
+				<div class="col-1">
+					<input type="checkbox" class="form-control  form-check-input" th:field="*{dizziness}">
+				</div>
+			</div>
 			
 			
 			

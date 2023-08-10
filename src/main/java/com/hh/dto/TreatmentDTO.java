@@ -57,14 +57,14 @@ public class TreatmentDTO {
 	
 	//Enquiry : Smelling
 	private String breathOdor;
-	private String sweatOdod;
+	private String sweatOdor;
 	private boolean odorUnderArmpit;
 	
 	//Enquiry : Food and appetite
 	private boolean poorAppetite;
 	private boolean lackOfAppetiteWithFullnessOfStomach;
-	private boolean hunderWithNoDesireToEat;
-	private boolean getHungryEasy;
+	private boolean hungerWithNoDesireToEat;
+	private boolean getHungryEasily;
 	private boolean inabilityToFeelTaste;
 	private String taste;
 	
@@ -78,10 +78,11 @@ public class TreatmentDTO {
 	
 	//Enquiry : Stool and urine
 	private String stoolConsistency;
+	private String urine;
 	private boolean flatulency;
 	private boolean prolapseAnus;
 	private boolean hemorrhoids;
-	private String urine;
+	
 	
 	//Enquiry : Sweating and perspiration
 	private boolean spontaneousSweating;
@@ -109,13 +110,13 @@ public class TreatmentDTO {
 	//Enquiry : Menstruration
 	private boolean mensturalDisorder;
 	private boolean mensturalPain;
-	private boolean ysmenorrhea;
+	private boolean dysmenorrhea;
 	private boolean leucorrhea;
 	private boolean vaginalDischarge;
-	private boolean frequency;
-	private boolean mensBloodQuantity;
-	private boolean mensBloodColor;
-	private boolean mensBloodSmell;
+	private String frequency;
+	private String mensBloodQuantity;
+	private String mensBloodColor;
+	private String mensBloodSmell;
 	
 	//Enquiry : others
 	private String pain;
