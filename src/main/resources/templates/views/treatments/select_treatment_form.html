@@ -67,7 +67,7 @@
 	<div th:insert="~{/fragments/header :: header}"></div>
 	<div class="container text-center">
 		<h2 th:text="${patient.name}"></h2>
-		Patient ID : <span th:text="${patient.id}"/>
+		<h6>Patient ID : <span th:text="${patient.id}"/></h6>
 		
 		<span th:text="${patient.addressLine1}+' '+${patient.addressLine2}+' '+${patient.city}+' '+${patient.state}+' '+${patient.country}"/>
 		<div class="row alert alert-secondary mt-2 text-center">
@@ -85,6 +85,18 @@
 		
 		<form th:action="@{/treatment/select_treatment}" th:object="${treatment}" th:method="post">
 			<div class="table border border-3 rounded">
+				
+				<div class="row mb-3 mt-3 me-2">
+					<div class="col-2">
+						<label>Treatment For</label>
+					</div>
+					<div class="col-10">
+						<input class="form-control" type="text" th:field="*{treatmentFor}">
+					</div>
+					
+				</div>
+				
+				
 				<div class="row mb-3 mt-2 me-2">
 					<div class="col-2">
 						<label>Package</label>

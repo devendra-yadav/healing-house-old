@@ -79,12 +79,12 @@ public class TreatmentController {
 		Patient patient = patientService.getPatientById(treatmentDto.getPatientId());
 		Package pkg = packageService.getPackageById(treatmentDto.getPackageId());
 		
-		Treatment treatment = new Treatment(treatmentDto, patient, pkg);
-		treatment = treatmentService.saveTreatment(treatment);
+		//Treatment treatment = new Treatment(treatmentDto, patient, pkg);
+		//treatment = treatmentService.saveTreatment(treatment);
 		
-		Payment payment = new Payment(treatment, treatmentDto.getAmountPaid(), treatmentDto.getPaymentMethod(), treatment.getStartDate());
-		paymentService.savePayment(payment);		
-		logger.info("Treatment saved "+treatment);
+		//Payment payment = new Payment(treatment, treatmentDto.getAmountPaid(), treatmentDto.getPaymentMethod(), treatment.getStartDate());
+		//paymentService.savePayment(payment);		
+		//logger.info("Treatment saved "+treatment);
 		
 		return "redirect:/patients/view/"+treatmentDto.getPatientId();
 	}

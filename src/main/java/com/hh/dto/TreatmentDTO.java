@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TreatmentDTO {
 
-	private String name;
+	private String treatmentFor;
 	private Integer patientId;
 	private Integer packageId;
 	private LocalDateTime startDate;
